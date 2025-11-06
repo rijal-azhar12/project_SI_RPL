@@ -155,4 +155,177 @@ document.addEventListener('DOMContentLoaded', function() {
 
   } // --- Akhir dari 'if (addMenuBtn)' ---
 
+  // ===============================================
+// TAMBAHKAN KODE INI DI DALAM LISTENER DOMContentLoaded
+// (di bawah blok 'if (addMenuBtn)')
+// ===============================================
+
+  // --- Seleksi Elemen Expense ---
+  const addExpenseBtn = document.getElementById('addExpenseBtn');
+
+  // Jika tombol 'Add Expense' ada, jalankan skrip modal expense
+  if (addExpenseBtn) {
+
+    // DOM Elements
+    const expenseModal = document.getElementById('expenseModal');
+    const deleteExpenseModal = document.getElementById('deleteExpenseModal');
+    const closeExpenseModal = document.getElementById('closeExpenseModal');
+    const cancelExpenseBtn = document.getElementById('cancelExpenseBtn');
+    const closeDeleteExpenseModal = document.getElementById('closeDeleteExpenseModal');
+    const cancelDeleteExpenseBtn = document.getElementById('cancelDeleteExpenseBtn');
+    const confirmDeleteExpenseBtn = document.getElementById('confirmDeleteExpenseBtn');
+    const expenseForm = document.getElementById('expenseForm');
+    const expenseModalTitle = document.getElementById('expenseModalTitle');
+
+    const editExpenseButtons = document.querySelectorAll('.edit-expense-btn');
+    const deleteExpenseButtons = document.querySelectorAll('.delete-expense-btn');
+
+    let currentExpenseId = null;
+
+    // Event Listeners
+    addExpenseBtn.addEventListener('click', () => {
+      currentExpenseId = null;
+      expenseModalTitle.textContent = 'Add Expense';
+      expenseForm.reset();
+      expenseModal.classList.add('active');
+    });
+
+    closeExpenseModal.addEventListener('click', () => expenseModal.classList.remove('active'));
+    cancelExpenseBtn.addEventListener('click', () => expenseModal.classList.remove('active'));
+    closeDeleteExpenseModal.addEventListener('click', () => deleteExpenseModal.classList.remove('active'));
+    cancelDeleteExpenseBtn.addEventListener('click', () => deleteExpenseModal.classList.remove('active'));
+
+    // Edit button click
+    editExpenseButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        currentExpenseId = button.getAttribute('data-id');
+        expenseModalTitle.textContent = `Edit Expense #${currentExpenseId}`;
+        
+        const row = button.closest('.table-row');
+        const timestamp = row.querySelector('.item-timestamp').textContent;
+        const description = row.querySelector('.item-description').textContent;
+        const amount = row.querySelector('.item-price').textContent.replace('$', ''); // Hapus '$'
+        
+        // Perlu format 'YYYY-MM-DDTHH:mm' untuk input datetime-local
+        // Ini adalah contoh, mungkin perlu penyesuaian format tanggal
+        // const formattedTimestamp = new Date(timestamp).toISOString().slice(0, 16);
+        
+        document.getElementById('expenseDescription').value = description;
+        document.getElementById('expenseAmount').value = amount;
+        // document.getElementById('expenseTimestamp').value = formattedTimestamp;
+        
+        expenseModal.classList.add('active');
+      });
+    });
+
+    // Delete button click
+    deleteExpenseButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        currentExpenseId = button.getAttribute('data-id');
+        deleteExpenseModal.classList.add('active');
+      });
+    });
+
+    // Confirm delete
+    confirmDeleteExpenseBtn.addEventListener('click', () => {
+      alert(`Expense item with ID ${currentExpenseId} has been deleted.`);
+      deleteExpenseModal.classList.remove('active');
+      // Logika hapus baris...
+    });
+
+    // Form submission
+    expenseForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (currentExpenseId) {
+        alert(`Expense #${currentExpenseId} has been updated.`);
+      } else {
+        alert('New expense has been added.');
+      }
+      expenseModal.classList.remove('active');
+      currentExpenseId = null;
+    });
+  }
+
+  // ===============================================
+// TAMBAHKAN KODE INI DI DALAM LISTENER DOMContentLoaded
+// (di bawah blok 'if (addExpenseBtn)')
+// ===============================================
+
+  // --- Seleksi Elemen Income ---
+  const editIncomeButtons = document.querySelectorAll('.edit-income-btn');
+  
+  // Kita cek berdasarkan tombol edit, karena tidak ada tombol 'Add' di header
+  if (editIncomeButtons.length > 0) {
+    
+    // DOM Elements
+    const incomeModal = document.getElementById('incomeModal');
+    const deleteIncomeModal = document.getElementById('deleteIncomeModal');
+    const closeIncomeModal = document.getElementById('closeIncomeModal');
+    const cancelIncomeBtn = document.getElementById('cancelIncomeBtn');
+    const closeDeleteIncomeModal = document.getElementById('closeDeleteIncomeModal');
+    const cancelDeleteIncomeBtn = document.getElementById('cancelDeleteIncomeBtn');
+    const confirmDeleteIncomeBtn = document.getElementById('confirmDeleteIncomeBtn');
+    const incomeForm = document.getElementById('incomeForm');
+    const incomeModalTitle = document.getElementById('incomeModalTitle');
+    const deleteIncomeButtons = document.querySelectorAll('.delete-income-btn');
+    
+    let currentIncomeId = null;
+
+    // Event Listeners
+    closeIncomeModal.addEventListener('click', () => incomeModal.classList.remove('active'));
+    cancelIncomeBtn.addEventListener('click', () => incomeModal.classList.remove('active'));
+    closeDeleteIncomeModal.addEventListener('click', () => deleteIncomeModal.classList.remove('active'));
+    cancelDeleteIncomeBtn.addEventListener('click', () => deleteIncomeModal.classList.remove('active'));
+
+    // Edit button click
+    editIncomeButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        currentIncomeId = button.getAttribute('data-id');
+        incomeModalTitle.textContent = `Edit Income #${currentIncomeId}`;
+        
+        const row = button.closest('.table-row');
+        const cashier = row.querySelector('.item-cashier').textContent;
+        // const timestamp = row.querySelector('.item-timestamp').textContent;
+        const menuName = row.querySelector('.item-name').textContent;
+        const category = row.querySelector('.item-category-tag').textContent;
+        const unit = row.querySelector('.item-units').textContent;
+        const unitPrice = row.querySelector('.item-price').textContent; // Ambil harga pertama (unit price)
+        
+        // Isi form modal
+        document.getElementById('incomeCashier').value = cashier;
+        document.getElementById('incomeMenuName').value = menuName;
+        document.getElementById('incomeCategory').value = category;
+        document.getElementById('incomeUnit').value = unit;
+        document.getElementById('incomeUnitPrice').value = unitPrice;
+        // (Timestamp perlu parsing, sama seperti expense)
+        
+        incomeModal.classList.add('active');
+      });
+    });
+
+    // Delete button click
+    deleteIncomeButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        currentIncomeId = button.getAttribute('data-id');
+        deleteIncomeModal.classList.add('active');
+      });
+    });
+
+    // Confirm delete
+    confirmDeleteIncomeBtn.addEventListener('click', () => {
+      alert(`Income record with ID ${currentIncomeId} has been deleted.`);
+      deleteIncomeModal.classList.remove('active');
+      // Logika hapus baris...
+    });
+
+    // Form submission
+    incomeForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert(`Income record #${currentIncomeId} has been updated.`);
+      incomeModal.classList.remove('active');
+      currentIncomeId = null;
+    });
+  }
+
+
 }); // --- Akhir dari 'DOMContentLoaded' ---
