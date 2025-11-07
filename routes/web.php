@@ -16,8 +16,16 @@ use Illuminate\Support\Facades\Route;
     return view('expense');
 });*/
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('incomes');
+});*/
+
+/*Route::get('/', function () {
+    return view('account');
+});*/
+
+Route::get('/', function () {
+    return redirect('/cashier');
 });
 
 // ... (Rute login, dll) ...

@@ -327,5 +327,260 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  // ===============================================
+// TAMBAHKAN KODE INI DI DALAM LISTENER DOMContentLoaded
+// (di bawah blok 'if (editIncomeButtons.length > 0)')
+// ===============================================
+
+  // --- Seleksi Elemen Account ---
+  const addAccountBtn = document.getElementById('addAccountBtn');
+  
+  if (addAccountBtn) {
+
+    // DOM Elements
+    const accountModal = document.getElementById('accountModal');
+    const deleteAccountModal = document.getElementById('deleteAccountModal');
+    const closeAccountModal = document.getElementById('closeAccountModal');
+    const cancelAccountBtn = document.getElementById('cancelAccountBtn');
+    const closeDeleteAccountModal = document.getElementById('closeDeleteAccountModal');
+    const cancelDeleteAccountBtn = document.getElementById('cancelDeleteAccountBtn');
+    const confirmDeleteAccountBtn = document.getElementById('confirmDeleteAccountBtn');
+    const accountForm = document.getElementById('accountForm');
+    const accountModalTitle = document.getElementById('accountModalTitle');
+
+    const editAccountButtons = document.querySelectorAll('.edit-account-btn');
+    const deleteAccountButtons = document.querySelectorAll('.delete-account-btn');
+
+    let currentAccountId = null;
+
+    // Event Listeners
+    addAccountBtn.addEventListener('click', () => {
+      currentAccountId = null;
+      accountModalTitle.textContent = 'Add Account';
+      accountForm.reset();
+      accountModal.classList.add('active');
+    });
+
+    closeAccountModal.addEventListener('click', () => accountModal.classList.remove('active'));
+    cancelAccountBtn.addEventListener('click', () => accountModal.classList.remove('active'));
+    closeDeleteAccountModal.addEventListener('click', () => deleteAccountModal.classList.remove('active'));
+    cancelDeleteAccountBtn.addEventListener('click', () => deleteAccountModal.classList.remove('active'));
+
+    // Edit button click
+    editAccountButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        currentAccountId = button.getAttribute('data-id');
+        accountModalTitle.textContent = `Edit Account #${currentAccountId}`;
+        
+        const row = button.closest('.table-row');
+        const name = row.querySelector('.item-name').textContent;
+        const username = row.querySelector('.item-username').textContent;
+        
+        // Isi form modal (Password tidak diisi untuk keamanan)
+        document.getElementById('accountName').value = name;
+        document.getElementById('accountUsername').value = username;
+        document.getElementById('accountPassword').value = '';
+        document.getElementById('accountPasswordConfirm').value = '';
+        
+        accountModal.classList.add('active');
+      });
+    });
+
+    // Delete button click
+    deleteAccountButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        currentAccountId = button.getAttribute('data-id');
+        deleteAccountModal.classList.add('active');
+      });
+    });
+
+    // Confirm delete
+    confirmDeleteAccountBtn.addEventListener('click', () => {
+      alert(`Account with ID ${currentAccountId} has been deleted.`);
+      deleteAccountModal.classList.remove('active');
+      // Logika hapus baris...
+    });
+
+    // Form submission
+    accountForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const pass = document.getElementById('accountPassword').value;
+      const confirmPass = document.getElementById('accountPasswordConfirm').value;
+
+      if (pass !== confirmPass) {
+        alert("Passwords do not match!");
+        return; // Hentikan eksekusi
+      }
+
+      if (currentAccountId) {
+        alert(`Account #${currentAccountId} has been updated.`);
+      } else {
+        alert('New account has been added.');
+      }
+      accountModal.classList.remove('active');
+      currentAccountId = null;
+    });
+  }
+
+  // ===============================================
+// TAMBAHKAN KODE INI DI DALAM LISTENER DOMContentLoaded
+// (di bawah blok 'if (addAccountBtn)')
+// ===============================================
+
+  // --- Logika Keranjang Belanja (Cashier) ---
+  const cashierPage = document.getElementById('cashier-page-wrapper');
+  
+  // Cek apakah kita ada di halaman kasir (Food atau Drinks)
+  if (cashierPage) {
+    
+    // KUNCI BARU: Dapatkan kunci localStorage dari atribut data-
+    // Ini akan menjadi 'foodCart' atau 'drinkCart'
+    const CART_KEY = cashierPage.dataset.cartKey;
+
+    // Variabel Global Keranjang
+    let cart = [];
+    const cartItemsList = document.getElementById('cart-items-list');
+    const addButtons = document.querySelectorAll('.btn-add-to-cart');
+    const cartEmptyState = document.getElementById('cart-empty');
+    const cartSubtotalEl = document.getElementById('cart-subtotal');
+    const cartTotalEl = document.getElementById('cart-total');
+    const btnCancelOrder = document.getElementById('btn-cancel-order');
+    const btnCompleteOrder = document.getElementById('btn-complete-order');
+
+    // --- Fungsi Utama ---
+
+    // 1. Render Ulang Tampilan Keranjang
+    function renderCart() {
+      // Kosongkan list
+      cartItemsList.innerHTML = '';
+      let subtotal = 0;
+
+      if (cart.length === 0) {
+        cartItemsList.appendChild(cartEmptyState);
+      } else {
+        cart.forEach(item => {
+          const itemTotal = item.price * item.quantity;
+          subtotal += itemTotal;
+          
+          const itemEl = document.createElement('div');
+          itemEl.className = 'cart-item';
+          itemEl.innerHTML = `
+            <div class="cart-item-header">
+              <div class="cart-item-info">
+                <span class="cart-item-name">${item.name}</span>
+                <span class="cart-item-price">$${item.price.toFixed(2)}</span>
+              </div>
+              <button class="cart-item-remove" data-id="${item.id}">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 6H5H21" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 11V17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 11V17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+            <div class="cart-item-footer">
+              <div class="quantity-control">
+                <button class="quantity-decrease" data-id="${item.id}">-</button>
+                <span>${item.quantity}</span>
+                <button class="quantity-increase" data-id="${item.id}">+</button>
+              </div>
+              <span class="cart-item-total">$${itemTotal.toFixed(2)}</span>
+            </div>
+          `;
+          cartItemsList.appendChild(itemEl);
+        });
+      }
+      
+      cartSubtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+      cartTotalEl.textContent = `$${subtotal.toFixed(2)}`;
+    }
+
+    // 2. Tambah ke Keranjang
+    function addToCart(id, name, price) {
+      const existingItem = cart.find(item => item.id === id);
+      if (existingItem) {
+        existingItem.quantity++;
+      } else {
+        cart.push({ id: id, name: name, price: price, quantity: 1 });
+      }
+      saveAndRenderCart();
+    }
+    
+    // 3. Ubah Kuantitas
+    function updateQuantity(id, change) {
+      const item = cart.find(item => item.id === id);
+      if (item) {
+        item.quantity += change;
+        if (item.quantity <= 0) {
+          removeFromCart(id);
+        } else {
+          saveAndRenderCart();
+        }
+      }
+    }
+    
+    // 4. Hapus dari Keranjang
+    function removeFromCart(id) {
+      cart = cart.filter(item => item.id !== id);
+      saveAndRenderCart();
+    }
+    
+    // 5. Simpan ke localStorage & Render (MENGGUNAKAN KUNCI SPESIFIK)
+    function saveAndRenderCart() {
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+      renderCart();
+    }
+    
+    // 6. Muat dari localStorage (MENGGUNAKAN KUNCI SPESIFIK)
+    function loadCart() {
+      const storedCart = localStorage.getItem(CART_KEY);
+      if (storedCart) {
+        cart = JSON.parse(storedCart);
+      }
+      renderCart();
+    }
+    
+    // 7. Kosongkan Keranjang
+    function clearCart(confirmMessage) {
+        if (confirm(confirmMessage)) {
+            cart = [];
+            saveAndRenderCart();
+        }
+    }
+
+    // --- Pasang Event Listeners ---
+
+    addButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const id = button.dataset.id;
+        const name = button.dataset.name;
+        const price = parseFloat(button.dataset.price);
+        addToCart(id, name, price);
+      });
+    });
+
+    btnCancelOrder.addEventListener('click', () => {
+        clearCart('Are you sure you want to cancel this order and clear the cart?');
+    });
+    
+    btnCompleteOrder.addEventListener('click', () => {
+        clearCart('Order completed. Clear the cart?');
+        // (Di sini Anda akan menambahkan logika print, dll)
+    });
+    
+    cartItemsList.addEventListener('click', (e) => {
+      const target = e.target;
+      if (target.classList.contains('quantity-increase')) {
+        updateQuantity(target.dataset.id, 1);
+      }
+      if (target.classList.contains('quantity-decrease')) {
+        updateQuantity(target.dataset.id, -1);
+      }
+      if (target.closest('.cart-item-remove')) {
+        removeFromCart(target.closest('.cart-item-remove').dataset.id);
+      }
+    });
+
+    // --- Muat Keranjang Saat Halaman Dibuka ---
+    loadCart();
+  }
+  
 
 }); // --- Akhir dari 'DOMContentLoaded' ---
