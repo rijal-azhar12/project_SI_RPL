@@ -28,9 +28,4 @@ Route::get('/', function () {
     return redirect('/cashier');
 });
 
-// Halaman kasir utama sekarang memuat file 'cashier_food'
-Route::get('/cashier', function () {
-    return view('cashier_food');
-})->name('cashier'); // Kita beri nama 'cashier'
-
 // ... (Rute login, dll) ...
