@@ -581,6 +581,5 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- Muat Keranjang Saat Halaman Dibuka ---
     loadCart();
   }
-  
 
 }); // --- Akhir dari 'DOMContentLoaded' ---
