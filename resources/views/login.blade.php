@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Papacino Login</title>
+  <title>Papacino Snacks & Drinks - Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
@@ -13,7 +14,7 @@
 
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #E8D5C3 0%, #F2E3D5 50%, #C47E45 100%);
+      background: linear-gradient(135deg, #f8f4f0 0%, #f2e3d5 50%, #e8d5c3 100%);
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -23,7 +24,7 @@
 
     .container {
       width: 100%;
-      max-width: 960px;
+      max-width: 420px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -32,178 +33,179 @@
     .login-box {
       width: 100%;
       background: white;
-      border-radius: 50px;
-      padding: 60px 80px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border-radius: 24px;
+      padding: 40px 35px;
+      box-shadow: 0 8px 30px rgba(94, 58, 47, 0.08);
       position: relative;
       margin-bottom: 20px;
+      border: 1px solid rgba(168, 105, 53, 0.1);
     }
 
     .logo-box {
-      width: 75px;
-      height: 75px;
-      margin: 0 auto 30px;
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 25px;
       position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
+      background: #f9f1e9;
+      border-radius: 16px;
     }
 
     .logo-outline {
-      width: 65px;
-      height: 62px;
-      outline: 4px solid #A86935;
-      outline-offset: -2px;
-      border-radius: 5px;
+      width: 40px;
+      height: 40px;
+      border: 3px solid #A86935;
+      border-radius: 8px;
+      position: relative;
+    }
+
+    .logo-outline::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #A86935;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
 
     .title {
       color: #5E3A2F;
-      font-size: 40px;
-      font-weight: 400;
+      font-size: 28px;
+      font-weight: 600;
       text-align: center;
-      margin-bottom: 15px;
+      margin-bottom: 8px;
+      letter-spacing: -0.2px;
     }
 
     .subtitle {
-      color: #808080;
-      font-size: 24px;
+      color: #8a7569;
+      font-size: 15px;
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 32px;
+      line-height: 1.5;
+      font-weight: 400;
     }
 
     .form-group {
-      margin-bottom: 30px;
+      margin-bottom: 22px;
     }
 
     .label {
       display: block;
       color: #5E3A2F;
-      font-size: 24px;
-      font-weight: 400;
-      margin-bottom: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      padding-left: 5px;
     }
 
     .input {
       width: 100%;
-      height: 60px;
-      background: #EEEEEE;
-      border-radius: 30px;
-      border: 1px solid #A86935;
-      padding: 0 25px;
-      font-size: 18px;
+      height: 48px;
+      background: #f9f9f9;
+      border-radius: 12px;
+      border: 1px solid #e5d9cf;
+      padding: 0 18px;
+      font-size: 15px;
       font-family: 'Poppins', sans-serif;
+      transition: all 0.2s ease;
     }
 
     .input:focus {
       outline: none;
-      border: 2px solid #A86935;
+      border-color: #A86935;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(168, 105, 53, 0.1);
+    }
+
+    .input::placeholder {
+      color: #b8a99e;
     }
 
     .remember-section {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 30px;
-      font-size: 20px;
+      margin-bottom: 26px;
+      font-size: 14px;
       color: #5E3A2F;
     }
 
     .remember-option {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .remember-section input[type="checkbox"] {
-      width: 25px;
-      height: 25px;
-      border: 1px solid #5E3A2F;
-      border-radius: 5px;
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid #d4c6b9;
+      border-radius: 4px;
+      accent-color: #A86935;
     }
 
     .forgot-link {
       color: #A86935;
       text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
     }
 
     .forgot-link:hover {
+      color: #8d5a2d;
       text-decoration: underline;
     }
 
     .login-button {
       width: 100%;
-      height: 65px;
+      height: 48px;
       background: #A86935;
-      border-radius: 50px;
+      border-radius: 12px;
       border: none;
       color: white;
-      font-size: 24px;
+      font-size: 16px;
+      font-weight: 500;
       cursor: pointer;
       font-family: 'Poppins', sans-serif;
-      transition: background 0.3s;
+      transition: all 0.3s;
+      letter-spacing: 0.2px;
     }
 
     .login-button:hover {
       background: #8d5a2d;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(168, 105, 53, 0.25);
+    }
+
+    .login-button:active {
+      transform: translateY(0);
     }
 
     .footer {
-      color: rgba(0, 0, 0, 0.5);
-      font-size: 18px;
+      color: rgba(94, 58, 47, 0.6);
+      font-size: 13px;
       text-align: center;
+      margin-top: 10px;
     }
 
     /* Responsive */
-    @media (max-width: 768px) {
-      .login-box {
-        padding: 40px 30px;
-        border-radius: 30px;
-      }
-      
-      .title {
-        font-size: 32px;
-      }
-      
-      .subtitle {
-        font-size: 20px;
-      }
-      
-      .label, .remember-section, .login-button {
-        font-size: 18px;
-      }
-      
-      .input {
-        height: 50px;
-      }
-      
-      .login-button {
-        height: 55px;
-      }
-    }
-
     @media (max-width: 480px) {
       .login-box {
-        padding: 30px 20px;
+        padding: 32px 24px;
         border-radius: 20px;
       }
       
       .title {
-        font-size: 28px;
+        font-size: 24px;
       }
       
       .subtitle {
-        font-size: 18px;
-      }
-      
-      .label, .remember-section, .login-button {
-        font-size: 16px;
-      }
-      
-      .remember-section {
-        flex-direction: column;
-        gap: 15px;
-        align-items: flex-start;
+        font-size: 14px;
       }
     }
   </style>
@@ -216,7 +218,7 @@
       </div>
       
       <h1 class="title">Papacino Snacks & Drinks</h1>
-      <p class="subtitle">Log in to manage sales, menu, and reports for Papacino.</p>
+      <p class="subtitle">Log in to manage sales, menu, and reports</p>
       
       <form>
         <div class="form-group">
@@ -229,13 +231,7 @@
           <input type="password" class="input" placeholder="Enter your password">
         </div>
         
-        <div class="remember-section">
-          <div class="remember-option">
-            <input type="checkbox" id="remember">
-            <label for="remember">Remember me</label>
-          </div>
-          <a href="#" class="forgot-link">Forgot password?</a>
-        </div>
+
         
         <button type="submit" class="login-button">Login</button>
       </form>

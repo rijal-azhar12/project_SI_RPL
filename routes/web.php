@@ -2,9 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
-/*Route::get('/', function () {
+Route::get('/', function () {
     return view('login');
-});*/
+});
 
 /*Route::get('/', function () {
     return view('menu_manajement');
@@ -22,10 +22,10 @@ use Illuminate\Support\Facades\Route;
     return view('account');
 });*/
 
-Route::get('/', function () {
-    return redirect('/cashier');
-});
+// Route::get('/', function () {
+//     return redirect('/cashier');
+// });
 
-Route::get('/cashier', function () {
-    return view('cashier_food');
-})->name('cashier');
+// Route::get('/cashier', function () {
+//     return view('cashier_food');
+// })->name('cashier');
