@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PengeluaranController;
+use App\Http\Controllers\AccountController;
 
 // Route::get('/', function () {
 //     return view('login');
@@ -34,3 +34,5 @@ Route::post('/pengeluaran', [PengeluaranController::class, 'store'])->name('peng
 Route::get('/pengeluaran/{pengeluaran}', [PengeluaranController::class, 'show'])->name('pengeluaran.show');
 Route::put('/pengeluaran/{pengeluaran}', [PengeluaranController::class, 'update'])->name('pengeluaran.update');
 Route::delete('/pengeluaran/{pengeluaran}', [PengeluaranController::class, 'destroy'])->name('pengeluaran.destroy');
+
+Route::resource('accounts', AccountController::class);

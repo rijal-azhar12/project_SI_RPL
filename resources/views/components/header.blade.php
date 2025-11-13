@@ -17,8 +17,8 @@
             <span>Menu</span>
         </a>
 
-        <a href=""
-            class="nav-item ">
+        <a href="{{ route('expense.index') }}"
+            class="nav-item {{ request()->routeIs('expense.index') ? 'active' : '' }}">
             <span>$</span>
             <span>Expenses</span>
         </a>
@@ -29,8 +29,8 @@
             <span>Incomes</span>
         </a>
 
-        <a href=""
-            class="nav-item ">
+        <a href="{{ route('accounts.index') }}"
+            class="nav-item {{ request()->routeIs('accounts.index') ? 'active' : '' }}">
             <span>&#128100;</span>
             <span>Accounts</span>
         </a>
