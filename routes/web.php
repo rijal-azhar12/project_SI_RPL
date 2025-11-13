@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\AccountController;
 
@@ -11,15 +12,15 @@ use App\Http\Controllers\AccountController;
     return view('menu_manajement');
 });*/
 
-Route::get('/', [PengeluaranController::class, 'index'])->name('expense.index');
+// Route::get('/', [PengeluaranController::class, 'index'])->name('expense.index');
 
 /*Route::get('/', function () {
     return view('incomes');
 });*/
 
-// Route::get('/', function () {
-//     return view('account');
-// });
+Route::get('/', function () {
+    return redirect('/accounts');
+});
 
 // Route::get('/', function () {
 //     return redirect('/cashier');

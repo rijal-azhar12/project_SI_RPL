@@ -23,16 +23,20 @@ class AccountController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users',
+            'nama' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:user',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
+        $lastId = User::max('id_user');
+        $newId = $lastId ? $lastId + 1 : 1;
+
         $user = User::create([
-            'name' => $validatedData['name'],
+            'id_user' => $newId,
+            'nama' => $validatedData['nama'],
             'username' => $validatedData['username'],
-            'password' => Hash::make($validatedData['password']),
-            'role' => $request->input('role', 'cashier'), // Default role to 'cashier'
+            'password' => $validatedData['password'],
+            'peran' => $request->input('peran', 'kasir'), // Default role to 'kasir'
         ]);
 
         return response()->json(['success' => true, 'message' => 'Account created successfully.']);
@@ -52,8 +56,8 @@ class AccountController extends Controller
     public function update(Request $request, User $account) // Using $account for route model binding
     {
         $rules = [
-            'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users,username,' . $account->id,
+            'nama' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:user,username,' . $account->id_user . ',id_user',
         ];
 
         if ($request->filled('password')) {
@@ -62,12 +66,12 @@ class AccountController extends Controller
 
         $validatedData = $request->validate($rules);
 
-        $account->name = $validatedData['name'];
+        $account->nama = $validatedData['nama'];
         $account->username = $validatedData['username'];
         if ($request->filled('password')) {
-            $account->password = Hash::make($validatedData['password']);
+            $account->password = $validatedData['password'];
         }
-        $account->role = $request->input('role', $account->role); // Allow role update, default to current role
+        $account->peran = $request->input('peran', $account->peran); // Allow role update, default to current role
 
         $account->save();
 
