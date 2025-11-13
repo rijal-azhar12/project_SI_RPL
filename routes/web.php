@@ -3,24 +3,23 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\MenuController;
 
 // Route::get('/', function () {
 //     return view('login');
 // });
 
-/*Route::get('/', function () {
-    return view('menu_manajement');
-});*/
+// Route::get('/', [MenuController::class, 'index'])->name('menu.index');
 
 // Route::get('/', [PengeluaranController::class, 'index'])->name('expense.index');
 
-/*Route::get('/', function () {
-    return view('incomes');
-});*/
-
 Route::get('/', function () {
-    return redirect('/accounts');
+    return view('incomes');
 });
+
+/*Route::get('/', function () {
+    return redirect('/accounts');
+});*/
 
 // Route::get('/', function () {
 //     return redirect('/cashier');
@@ -37,3 +36,4 @@ Route::put('/pengeluaran/{pengeluaran}', [PengeluaranController::class, 'update'
 Route::delete('/pengeluaran/{pengeluaran}', [PengeluaranController::class, 'destroy'])->name('pengeluaran.destroy');
 
 Route::resource('accounts', AccountController::class);
+Route::resource('menu', MenuController::class);
