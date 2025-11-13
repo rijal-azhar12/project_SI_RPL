@@ -218,17 +218,17 @@
       </div>
       
       <h1 class="title">Papacino Snacks & Drinks</h1>
-      <p class="subtitle">Log in to manage sales, menu, and reports</p>
+      <p class="subtitle">login untuk menggunakan fitur</p>
       
       <form>
         <div class="form-group">
           <label class="label">Username</label>
-          <input type="text" class="input" placeholder="Enter your username">
+          <input type="text" class="input" placeholder="Masukan Username">
         </div>
         
         <div class="form-group">
           <label class="label">Password</label>
-          <input type="password" class="input" placeholder="Enter your password">
+          <input type="password" class="input" placeholder="Masukan password">
         </div>
         
 

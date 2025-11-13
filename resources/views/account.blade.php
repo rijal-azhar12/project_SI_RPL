@@ -7,8 +7,8 @@
     {{-- Header Halaman --}}
     <div class="page-header">
         <div>
-            <h1 class="page-title">Account Management</h1>
-            <p class="page-subtitle">Manage your accounts</p>
+            <h1 class="page-title">Manajemen Akun</h1>
+            <!-- <p class="page-subtitle">Manage your accounts</p> -->
         </div>
         
         {{-- Tombol Add Account (Sama seperti halaman Menu) --}}
