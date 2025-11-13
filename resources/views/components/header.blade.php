@@ -10,19 +10,19 @@
             <span>Menu</span>
         </a>
 
-        <a href="" class="nav-item ">
+        <a href="{{ url('/pengeluaran') }}" class="nav-item ">
             <span>$</span>
-            <span>Expenses</span>
+            <span>Pengeluaran</span>
         </a>
 
         <a href="" class="nav-item ">
             <span>$</span>
-            <span>Incomes</span>
+            <span>Pendapatan</span>
         </a>
 
-        <a href="" class="nav-item ">
+        <a href="{{ url('/accounts') }}" class="nav-item ">
             <span>&#128100;</span>
-            <span>Accounts</span>
+            <span>Akun</span>
         </a>
 
         <a href="#" class="nav-item owner">
