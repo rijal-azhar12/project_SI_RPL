@@ -220,18 +220,40 @@
       <h1 class="title">Papacino Snacks & Drinks</h1>
       <p class="subtitle">login untuk menggunakan fitur</p>
       
-      <form>
+      <form action="{{ route('login') }}" method="POST">
+        @csrf
+
+        @if ($errors->any())
+            <div style="color: red; margin-bottom: 15px; text-align: center;">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div style="color: red; margin-bottom: 15px; text-align: center;">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div class="form-group">
           <label class="label">Username</label>
-          <input type="text" class="input" placeholder="Masukan Username">
+          <input type="text" class="input" placeholder="Masukan Username" name="username" value="{{ old('username') }}">
+          @error('username')
+              <span style="color: red; font-size: 12px;">{{ $message }}</span>
+          @enderror
         </div>
         
         <div class="form-group">
           <label class="label">Password</label>
-          <input type="password" class="input" placeholder="Masukan password">
+          <input type="password" class="input" placeholder="Masukan password" name="password">
+          @error('password')
+              <span style="color: red; font-size: 12px;">{{ $message }}</span>
+          @enderror
         </div>
-        
-
         
         <button type="submit" class="login-button">Login</button>
       </form>
