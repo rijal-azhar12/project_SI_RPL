@@ -5,7 +5,7 @@
     </div>
 
     <nav class="nav-menu">
-        <a href="" class="nav-item ">
+        <a href="{{ url('/menu') }}" class="nav-item ">
             <span>&#9776;</span>
             <span>Menu</span>
         </a>
@@ -15,9 +15,9 @@
             <span>Pengeluaran</span>
         </a>
 
-        <a href="" class="nav-item ">
+        <a href="{{ url('/pemasukan') }}" class="nav-item ">
             <span>$</span>
-            <span>Pendapatan</span>
+            <span>Pemasukan</span>
         </a>
 
         <a href="{{ url('/accounts') }}" class="nav-item ">
@@ -25,12 +25,12 @@
             <span>Akun</span>
         </a>
 
-        <a href="#" class="nav-item owner">
+        <a href="" class="nav-item owner">
             <span>&#128100;</span>
             <span>Owner</span>
         </a>
 
-        <a href="#" class="nav-item logout">
+        <a href="" class="nav-item logout">
             <span>&#10162;</span>
             <span>Logout</span>
         </a>

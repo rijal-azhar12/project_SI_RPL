@@ -1,9 +1,9 @@
 {{-- Ini adalah resources/views/cashier_food.blade.php (Sekarang berisi SEMUA produk) --}}
-@extends('layouts.cashier') {{-- Tetap menggunakan layout kasir --}}
+@extends('layouts.kasir') {{-- Tetap menggunakan layout kasir --}}
 
 @section('content')
 
-{{-- 
+{{--
   Wrapper PENTING:
   Kita gunakan "mainCart" sebagai satu-satunya keranjang.
 --}}
@@ -15,7 +15,7 @@
     <h2 class="product-category-title">Foods</h2>
 
     <div class="product-grid">
-        
+
         {{-- Contoh Kartu Makanan 1 --}}
         <div class="product-card">
             <img class="product-image" src="https://placehold.co/400x300/A0522D/FFFFFF?text=Takoyaki" alt="Takoyaki">
@@ -52,7 +52,7 @@
     <h2 class="product-category-title">Drinks</h2>
 
     <div class="product-grid">
-        
+
         {{-- Contoh Kartu Minuman 1: Espresso --}}
         <div class="product-card">
             <img class="product-image" src="https://placehold.co/400x300/6F4E37/FFFFFF?text=Espresso" alt="Espresso">
@@ -68,7 +68,8 @@
 
         {{-- Contoh Kartu Minuman 2: Cappuccino --}}
         <div class="product-card">
-            <img class="product-image" src="https://placehold.co/400x300/8B6B5C/FFFFFF?text=Cappuccino" alt="Cappuccino">
+            <img class="product-image" src="https://placehold.co/400x300/8B6B5C/FFFFFF?text=Cappuccino"
+                alt="Cappuccino">
             <div class="product-info">
                 <span class="product-tag">Drinks</span>
                 <span class="product-name">Cappuccino</span>
@@ -78,7 +79,7 @@
                 + Add
             </button>
         </div>
-        
+
         {{-- (Tambahkan kartu minuman lainnya di sini) --}}
     </div>
 </div>

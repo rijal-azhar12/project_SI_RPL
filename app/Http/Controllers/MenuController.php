@@ -13,7 +13,7 @@ class MenuController extends Controller
     public function index()
     {
         $menus = Menu::all();
-        return view('menu_manajement', compact('menus'));
+        return view('menu', compact('menus'));
     }
 
     /**
@@ -21,7 +21,7 @@ class MenuController extends Controller
      */
     public function create()
     {
-        return view('menu_manajement_create'); // Anda bisa membuat view terpisah untuk form create
+        return view('menu_create'); // Anda bisa membuat view terpisah untuk form create
     }
 
     /**
@@ -56,7 +56,7 @@ class MenuController extends Controller
      */
     public function edit(Menu $menu)
     {
-        return view('menu_manajement_edit', compact('menu')); // Anda bisa membuat view terpisah untuk form edit
+        return view('menu_edit', compact('menu')); // Anda bisa membuat view terpisah untuk form edit
     }
 
     /**
