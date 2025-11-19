@@ -1,194 +1,213 @@
-{{-- Ini adalah isi BARU untuk resources/views/incomes.blade.php --}}
+{{-- Ini adalah isi BARU untuk resources/views/pendapatan.blade.php --}}
 @extends('layouts.app')
 
 @section('content')
 <div class="container">
-    
-    {{-- Header Halaman --}}
-    <div class="page-header">
-        <div>
-            <h1 class="page-title">Incomes Management</h1>
-            <p class="page-subtitle">Manage your incomes</p>
-        </div>
+ 
+  {{-- Header Halaman --}}
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Incomes Management</h1>
+      <p class="page-subtitle">Manage your incomes</p>
     </div>
+  </div>
 
-    {{-- 1. KARTU STATISTIK --}}
-    <div class="stat-cards-container">
-        <div class="stat-card">
-            <span class="stat-title">Total Revenue</span>
-            <span class="stat-value stat-revenue">$400</span>
-            <span class="stat-subtitle">Day ... Period</span>
-        </div>
-        <div class="stat-card">
-            <span class="stat-title">Total Units Sold</span>
-            <span class="stat-value">8</span>
-            <span class="stat-subtitle">Across ... Transactions</span>
-        </div>
-        <div class="stat-card">
-            <span class="stat-title">Top Selling Item</span>
-            <span class="stat-value">Cappucino</span>
-            <span class="stat-subtitle">... Units Sold</span>
-        </div>
+  {{-- 1. KARTU STATISTIK (DINAMIS) --}}
+  <div class="stat-cards-container">
+    <div class="stat-card">
+      <span class="stat-title">Total Revenue</span>
+      {{-- Data Dinamis --}}
+      <span class="stat-value stat-revenue">${{ number_format($totalRevenue, 2) }}</span>
+      <span class="stat-subtitle">{{ $filter }} ({{ $filterPeriod }})</span>
     </div>
-
-    {{-- 2. FILTER BAR (HTML Sederhana) --}}
-    <div class="filter-bar">
-        <div class="search-field">
-            {{-- Icon Search (SVG) --}}
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.16667 15.8333C12.8486 15.8333 15.8333 12.8486 15.8333 9.16667C15.8333 5.48477 12.8486 2.5 9.16667 2.5C5.48477 2.5 2.5 5.48477 2.5 9.16667C2.5 12.8486 5.48477 15.8333 9.16667 15.8333Z" stroke="#AAAAAA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M17.5 17.5L13.875 13.875" stroke="#AAAAAA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <input type="text" placeholder="Search by ID, Menu, Category, or Price...">
-        </div>
-        <div class="filter-controls">
-            <input type="text" class="filter-datepicker" value="23-Oct-2025, 10:00:00">
-            <button class="filter-btn">Day</button>
-            <button class="filter-btn">Week</button>
-            <button class="filter-btn active">Month</button>
-            <select class="filter-group-by">
-                <option>Group by: Month</option>
-            </select>
-        </div>
+    <div class="stat-card">
+      <span class="stat-title">Total Units Sold</span>
+      {{-- Data Dinamis --}}
+      <span class="stat-value">{{ $totalUnitsSold }}</span>
+      <span class="stat-subtitle">Across transactions</span>
     </div>
+    <div class="stat-card">
+      <span class="stat-title">Top Selling Item</span>
+      {{-- Data Dinamis (Cek jika ada) --}}
+      @if($topSellingItem)
+        <span class="stat-value">{{ $topSellingItem->nama_menu }}</span>
+        <span class="stat-subtitle">{{ $topSellingItem->total_terjual }} Units Sold</span>
+      @else
+        <span class="stat-value">-</span>
+        <span class="stat-subtitle">No sales yet</span>
+      @endif
+    </div>
+  </div>
 
-    {{-- 3. TABEL INCOMES (9 Kolom) --}}
-    <div class="menu-table">
-        <div class="table-header income-grid">
-            <div>#</div>
-            <div># - Cashier</div>
-            <div>Timestamp</div>
-            <div>Menu Name</div>
-            <div>Category</div>
-            <div>Units</div>
-            <div>Unit Price</div>
-            <div>Total Price</div>
-            <div style="text-align: right;">Actions</div>
-        </div>
-
-        {{-- Baris 1 --}}
-        <div class="table-row income-grid">
-            <div class="item-number">1</div>
-            <div class="item-cashier">1 - Qholdi</div>
-            <div class="item-timestamp">23-Oct-2025, 18:00:05</div>
-            <div class="item-name">Sandwich</div>
-            <div class="item-category-cell"><div class="item-category-tag">Food</div></div>
-            <div class="item-units">2</div>
-            <div class="item-price">$2</div>
-            <div class="item-price">$4</div>
-            <div class="item-actions">
-                <button class="btn-action-edit edit-income-btn" data-id="1">Edit</button>
-                <button class="btn-action-delete delete-income-btn" data-id="1">Delete</button>
-            </div>
-        </div>
-
-        {{-- Baris 2 --}}
-        <div class="table-row income-grid">
-            <div class="item-number">2</div>
-            <div class="item-cashier">1 - Qholdi</div>
-            <div class="item-timestamp">23-Oct-2025, 19:20:35</div>
-            <div class="item-name">Espresso</div>
-            <div class="item-category-cell"><div class="item-category-tag">Drink</div></div>
-            <div class="item-units">5</div>
-            <div class="item-price">$1.50</div>
-            <div class="item-price">$7.50</div>
-            <div class="item-actions">
-                <button class="btn-action-edit edit-income-btn" data-id="2">Edit</button>
-                <button class="btn-action-delete delete-income-btn" data-id="2">Delete</button>
-            </div>
-        </div>
+  {{-- 2. FILTER BAR (Search bar dihapus, Tombol jadi link) --}}
+  <div class="filter-bar">
+    {{-- Search Bar Dihapus Sesuai Permintaan --}}
+    <div class="search-field" style="flex-grow: 1;">
+      {{-- Kosong, atau bisa diisi info lain --}}
+    </div>
+   
+    <div class="filter-controls">
+      {{-- Tombol filter kini menjadi link (<a>) --}}
+      <a href="{{ route('pendapatan.index', ['filter' => 'Day']) }}" 
+        class="filter-btn {{ $filter == 'Day' ? 'active' : '' }}">Day</a>
         
-        {{-- Baris 3 --}}
-        <div class="table-row income-grid">
-            <div class="item-number">3</div>
-            <div class="item-cashier">2 - Rasya</div>
-            <div class="item-timestamp">24-Oct-2025, 19:35:00</div>
-            <div class="item-name">Cappucino</div>
-            <div class="item-category-cell"><div class="item-category-tag">Drink</div></div>
-            <div class="item-units">1</div>
-            <div class="item-price">$2.05</div>
-            <div class="item-price">$2.05</div>
-            <div class="item-actions">
-                <button class="btn-action-edit edit-income-btn" data-id="3">Edit</button>
-                <button class="btn-action-delete delete-income-btn" data-id="3">Delete</button>
-            </div>
-        </div>
-
+      <a href="{{ route('pendapatan.index', ['filter' => 'Week']) }}" 
+        class="filter-btn {{ $filter == 'Week' ? 'active' : '' }}">Week</a>
+        
+      <a href="{{ route('pendapatan.index', ['filter' => 'Month']) }}" 
+        class="filter-btn {{ $filter == 'Month' ? 'active' : '' }}">Month</a>
+        
+      {{-- Hapus 'Group by' jika tidak diperlukan, atau sesuaikan nanti --}}
     </div>
-</div>
-
-
-{{-- ===============================================
-   MODAL UNTUK INCOMES (TERSEMBUNYI)
-   =============================================== --}}
-
-<!-- Add/Edit Income Modal -->
-<div class="modal" id="incomeModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2 class="modal-title" id="incomeModalTitle">Edit Income #...</h2>
-      <span class="close-btn" id="closeIncomeModal">&times;</span>
-    </div>
-    <form id="incomeForm">
-      
-      <div class="form-row">
-        <div class="form-group">
-            <label for="incomeCashier"># - Cashier *</label>
-            <select id="incomeCashier" required>
-                <option value="">Pilih Kasir</option>
-                <option value="1 - Qholdi">1 - Qholdi</option>
-                <option value="2 - Rasya">2 - Rasya</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="incomeTimestamp">Timestamp *</label>
-            <input type="datetime-local" id="incomeTimestamp" required>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label for="incomeMenuName">Menu Name *</label>
-          <input type="text" id="incomeMenuName" required>
-        </div>
-        <div class="form-group">
-            <label for="incomeCategory">Category *</label>
-            <select id="incomeCategory" required>
-                <option value="">Pilih Kategori</option>
-                <option value="Food">Food</option>
-                <option value="Drink">Drink</option>
-            </select>
-        </div>
-      </div>
-      
-      <div class="form-row">
-        <div class="form-group">
-          <label for="incomeUnit">Unit *</label>
-          <input type="number" id="incomeUnit" required>
-        </div>
-        <div class="form-group">
-          <label for="incomeUnitPrice">Unit Price*</label>
-          <input type="text" id="incomeUnitPrice" placeholder="$0.00" required>
-        </div>
-      </div>
-      
-      <div class="form-actions">
-        <button type="button" class="btn btn-secondary" id="cancelIncomeBtn">Cancel</button>
-        <button type="submit" class="btn btn-primary">Save</button>
-      </div>
-    </form>
   </div>
+
+  {{-- 3. TABEL INCOMES (DINAMIS) --}}
+  <div class="menu-table">
+    <div class="table-header income-grid">
+      <div>#</div>
+      <div># - Cashier</div>
+      <div>Timestamp</div>
+      <div>Menu Name</div>
+      <div>Category</div>
+      <div>Units</div>
+      <div>Unit Price</div>
+      <div>Total Price</div>
+      <div style="text-align: right;">Actions</div>
+    </div>
+
+    {{-- Loop data dari controller --}}
+    @forelse($incomes as $income)
+    <div class="table-row income-grid" id="income-row-{{ $income->id_detail }}">
+      <div class="item-number">{{ $loop->iteration }}</div>
+      {{-- Cek jika relasi ada untuk menghindari error --}}
+      <div class="item-cashier">{{ $income->transaksi->user->id_user ?? 'N/A' }} - {{ $income->transaksi->user->nama ?? 'N/A' }}</div>
+      <div class="item-timestamp">{{ \Carbon\Carbon::parse($income->transaksi->tanggal_transaksi)->format('d-M-Y, H:i:s') }}</div>
+      <div class="item-name">{{ $income->menu->nama_menu ?? 'Menu Dihapus' }}</div>
+      <div class="item-category-cell"><div class="item-category-tag">{{ $income->menu->kategori_menu ?? 'N/A' }}</div></div>
+      <div class="item-units">{{ $income->jumlah_item }}</div>
+      <div class="item-price">${{ number_format($income->menu->harga_menu ?? 0, 2) }}</div>
+      <div class="item-price">${{ number_format($income->subtotal, 2) }}</div>
+      <div class="item-actions">
+        {{-- Tombol Edit Dihapus Sesuai Permintaan --}}
+        <button class="btn-action-delete delete-income-btn" data-id="{{ $income->id_detail }}">Delete</button>
+      </div>
+    </div>
+    @empty
+    <div class="table-row">
+      <div style="text-align: center; grid-column: 1 / -1; padding: 20px;">
+        No income data found for this period.
+      </div>
+    </div>
+    @endforelse
+   
+  </div>
+
+    {{-- Link Paginasi --}}
+    <div class="pagination-links" style="margin-top: 20px;">
+        {{ $incomes->appends(request()->query())->links() }}
+    </div>
+
 </div>
 
-<!-- Delete Income Confirmation Modal -->
+{{-- Modal Edit Dihapus Sesuai Permintaan --}}
+
 <div class="modal confirmation-modal" id="deleteIncomeModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2 class="modal-title">Delete Income</h2>
-      <span class="close-btn" id="closeDeleteIncomeModal">&times;</span>
-    </div>
-    <p class="confirmation-text">Are you sure you want to delete this income record?</p>
-    <div class="form-actions">
-      <button type="button" class="btn btn-secondary" id="cancelDeleteIncomeBtn">Cancel</button>
-      <button type="button" class="btn btn-danger" id="confirmDeleteIncomeBtn">Delete</button>
-    </div>
+ <div class="modal-content">
+  <div class="modal-header">
+   <h2 class="modal-title">Delete Income</h2>
+   <span class="close-btn" id="closeDeleteIncomeModal">&times;</span>
   </div>
+  <p class="confirmation-text">Are you sure you want to delete this income record?</p>
+  <div class="form-actions">
+   <button type="button" class="btn btn-secondary" id="cancelDeleteIncomeBtn">Cancel</button>
+   <button type="button" class="btn btn-danger" id="confirmDeleteIncomeBtn">Delete</button>
+  </div>
+ </div>
 </div>
 @endsection
+
+@push('scripts')
+{{-- Kita akan push JS kustom ke layout app.blade.php --}}
+<script>
+    // Pastikan DOM sudah dimuat
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // --- 1. Ambil CSRF Token ---
+        // (Pastikan Anda punya <meta name="csrf-token" content="{{ csrf_token() }}"> di <head> layout Anda)
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        const deleteIncomeModal = document.getElementById("deleteIncomeModal");
+        const closeDeleteIncomeModal = document.getElementById("closeDeleteIncomeModal");
+        const cancelDeleteIncomeBtn = document.getElementById("cancelDeleteIncomeBtn");
+        const confirmDeleteIncomeBtn = document.getElementById("confirmDeleteIncomeBtn");
+        const deleteIncomeButtons = document.querySelectorAll(".delete-income-btn");
+
+        let currentIncomeId = null; // Variabel untuk menyimpan ID yang akan dihapus
+
+        if (deleteIncomeModal) { // Cek jika modal ada
+            // --- 2. Logic Tombol Hapus (Buka Modal) ---
+            deleteIncomeButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            currentIncomeId = button.getAttribute("data-id");
+            deleteIncomeModal.classList.add("active");
+          });
+        });
+
+            // --- 3. Logic Tombol Tutup Modal ---
+            closeDeleteIncomeModal.addEventListener("click", () =>
+          deleteIncomeModal.classList.remove("active")
+        );
+        cancelDeleteIncomeBtn.addEventListener("click", () =>
+          deleteIncomeModal.classList.remove("active")
+        );
+
+            // --- 4. Logic Konfirmasi Hapus (AJAX/Fetch) ---
+            confirmDeleteIncomeBtn.addEventListener("click", () => {
+                if (!currentIncomeId) return;
+
+                const url = `/pendapatan/${currentIncomeId}`;
+
+                fetch(url, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Something went wrong.');
+                })
+                .then(data => {
+                    console.log(data.message); // "Income record deleted successfully."
+                    
+                    // Hapus baris dari tabel di UI
+                    const rowToRemove = document.getElementById(`income-row-${currentIncomeId}`);
+                    if (rowToRemove) {
+                        rowToRemove.remove();
+                    }
+                    
+                    deleteIncomeModal.classList.remove("active");
+                    currentIncomeId = null;
+                    
+                    // (Opsional) Tampilkan notifikasi sukses
+                    // alert('Data berhasil dihapus!');
+                    
+                    // (Opsional) Jika Anda ingin me-reload statistik, reload halaman
+                    // location.reload(); 
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Gagal menghapus data.');
+                    deleteIncomeModal.classList.remove("active");
+                });
+            });
+        }
+
+        // --- HAPUS SEMUA KODE MODAL EDIT ---
+        // (Kode 'editIncomeButtons', 'incomeModal', 'incomeForm' sudah dihapus)
+    });
+</script>
+@endpush

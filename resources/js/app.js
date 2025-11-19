@@ -226,84 +226,84 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    const editIncomeButtons = document.querySelectorAll(".edit-income-btn");
+    // const editIncomeButtons = document.querySelectorAll(".edit-income-btn");
 
-    if (editIncomeButtons.length > 0) {
-        const incomeModal = document.getElementById("incomeModal");
-        const deleteIncomeModal = document.getElementById("deleteIncomeModal");
-        const closeIncomeModal = document.getElementById("closeIncomeModal");
-        const cancelIncomeBtn = document.getElementById("cancelIncomeBtn");
-        const closeDeleteIncomeModal = document.getElementById(
-            "closeDeleteIncomeModal"
-        );
-        const cancelDeleteIncomeBtn = document.getElementById(
-            "cancelDeleteIncomeBtn"
-        );
-        const confirmDeleteIncomeBtn = document.getElementById(
-            "confirmDeleteIncomeBtn"
-        );
-        const incomeForm = document.getElementById("incomeForm");
-        const incomeModalTitle = document.getElementById("incomeModalTitle");
-        const deleteIncomeButtons =
-            document.querySelectorAll(".delete-income-btn");
+    // if (editIncomeButtons.length > 0) {
+    //     const incomeModal = document.getElementById("incomeModal");
+    //     const deleteIncomeModal = document.getElementById("deleteIncomeModal");
+    //     const closeIncomeModal = document.getElementById("closeIncomeModal");
+    //     const cancelIncomeBtn = document.getElementById("cancelIncomeBtn");
+    //     const closeDeleteIncomeModal = document.getElementById(
+    //         "closeDeleteIncomeModal"
+    //     );
+    //     const cancelDeleteIncomeBtn = document.getElementById(
+    //         "cancelDeleteIncomeBtn"
+    //     );
+    //     const confirmDeleteIncomeBtn = document.getElementById(
+    //         "confirmDeleteIncomeBtn"
+    //     );
+    //     const incomeForm = document.getElementById("incomeForm");
+    //     const incomeModalTitle = document.getElementById("incomeModalTitle");
+    //     const deleteIncomeButtons =
+    //         document.querySelectorAll(".delete-income-btn");
 
-        let currentIncomeId = null;
+    //     let currentIncomeId = null;
 
-        closeIncomeModal.addEventListener("click", () =>
-            incomeModal.classList.remove("active")
-        );
-        cancelIncomeBtn.addEventListener("click", () =>
-            incomeModal.classList.remove("active")
-        );
-        closeDeleteIncomeModal.addEventListener("click", () =>
-            deleteIncomeModal.classList.remove("active")
-        );
-        cancelDeleteIncomeBtn.addEventListener("click", () =>
-            deleteIncomeModal.classList.remove("active")
-        );
+    //     closeIncomeModal.addEventListener("click", () =>
+    //         incomeModal.classList.remove("active")
+    //     );
+    //     cancelIncomeBtn.addEventListener("click", () =>
+    //         incomeModal.classList.remove("active")
+    //     );
+    //     closeDeleteIncomeModal.addEventListener("click", () =>
+    //         deleteIncomeModal.classList.remove("active")
+    //     );
+    //     cancelDeleteIncomeBtn.addEventListener("click", () =>
+    //         deleteIncomeModal.classList.remove("active")
+    //     );
 
-        editIncomeButtons.forEach((button) => {
-            button.addEventListener("click", () => {
-                currentIncomeId = button.getAttribute("data-id");
-                incomeModalTitle.textContent = `Edit Income #${currentIncomeId}`;
+    //     editIncomeButtons.forEach((button) => {
+    //         button.addEventListener("click", () => {
+    //             currentIncomeId = button.getAttribute("data-id");
+    //             incomeModalTitle.textContent = `Edit Income #${currentIncomeId}`;
 
-                const row = button.closest(".table-row");
-                const cashier = row.querySelector(".item-cashier").textContent;
-                const menuName = row.querySelector(".item-name").textContent;
-                const category =
-                    row.querySelector(".item-category-tag").textContent;
-                const unit = row.querySelector(".item-units").textContent;
-                const unitPrice = row.querySelector(".item-price").textContent; // Ambil harga pertama (unit price)
+    //             const row = button.closest(".table-row");
+    //             const cashier = row.querySelector(".item-cashier").textContent;
+    //             const menuName = row.querySelector(".item-name").textContent;
+    //             const category =
+    //                 row.querySelector(".item-category-tag").textContent;
+    //             const unit = row.querySelector(".item-units").textContent;
+    //             const unitPrice = row.querySelector(".item-price").textContent; // Ambil harga pertama (unit price)
 
-                document.getElementById("incomeCashier").value = cashier;
-                document.getElementById("incomeMenuName").value = menuName;
-                document.getElementById("incomeCategory").value = category;
-                document.getElementById("incomeUnit").value = unit;
-                document.getElementById("incomeUnitPrice").value = unitPrice;
+    //             document.getElementById("incomeCashier").value = cashier;
+    //             document.getElementById("incomeMenuName").value = menuName;
+    //             document.getElementById("incomeCategory").value = category;
+    //             document.getElementById("incomeUnit").value = unit;
+    //             document.getElementById("incomeUnitPrice").value = unitPrice;
 
-                incomeModal.classList.add("active");
-            });
-        });
+    //             incomeModal.classList.add("active");
+    //         });
+    //     });
 
-        deleteIncomeButtons.forEach((button) => {
-            button.addEventListener("click", () => {
-                currentIncomeId = button.getAttribute("data-id");
-                deleteIncomeModal.classList.add("active");
-            });
-        });
+    //     deleteIncomeButtons.forEach((button) => {
+    //         button.addEventListener("click", () => {
+    //             currentIncomeId = button.getAttribute("data-id");
+    //             deleteIncomeModal.classList.add("active");
+    //         });
+    //     });
 
-        confirmDeleteIncomeBtn.addEventListener("click", () => {
-            alert(`Income record with ID ${currentIncomeId} has been deleted.`);
-            deleteIncomeModal.classList.remove("active");
-        });
+    //     confirmDeleteIncomeBtn.addEventListener("click", () => {
+    //         alert(`Income record with ID ${currentIncomeId} has been deleted.`);
+    //         deleteIncomeModal.classList.remove("active");
+    //     });
 
-        incomeForm.addEventListener("submit", (e) => {
-            e.preventDefault();
-            alert(`Income record #${currentIncomeId} has been updated.`);
-            incomeModal.classList.remove("active");
-            currentIncomeId = null;
-        });
-    }
+    //     incomeForm.addEventListener("submit", (e) => {
+    //         e.preventDefault();
+    //         alert(`Income record #${currentIncomeId} has been updated.`);
+    //         incomeModal.classList.remove("active");
+    //         currentIncomeId = null;
+    //     });
+    // }
 
     const addAccountBtn = document.getElementById("addAccountBtn");
 

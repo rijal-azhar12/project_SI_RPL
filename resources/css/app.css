@@ -619,168 +619,324 @@ body {
    =============================================== */
 
 /* Kontainer untuk 3 Kartu Statistik */
+
+/* --- 1. Style Kartu Statistik & Filter (Dari Anda) --- */
 .stat-cards-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 kolom sama rata */
-  gap: 20px;
-  margin-bottom: 20px;
+ display: grid;
+ grid-template-columns: repeat(3, 1fr);
+ gap: 20px;
+ margin-bottom: 20px;
 }
 
 .stat-card {
-  background: white;
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0px 2px 4px -2px rgba(0, 0, 0, 0.10);
-  border: 1px solid #E8D5C3;
-  display: flex;
-  flex-direction: column;
+ background: white;
+ border-radius: 16px;
+ padding: 20px;
+ box-shadow: 0px 2px 4px -2px rgba(0, 0, 0, 0.10);
+ border: 1px solid #E8D5C3;
+ display: flex;
+ flex-direction: column;
 }
 
 .stat-card .stat-title {
-  font-size: 20px;
-  font-weight: 400;
-  color: black;
-  line-height: 1.2;
+ font-size: 20px;
+ font-weight: 400;
+ color: black;
+ line-height: 1.2;
 }
 .stat-card .stat-value {
-  font-size: 28px;
-  font-weight: 400;
-  color: #5E3A2F;
-  line-height: 1.3;
-  margin: 5px 0;
+ font-size: 28px;
+ font-weight: 400;
+ color: #5E3A2F;
+ line-height: 1.3;
+ margin: 5px 0;
 }
 .stat-card .stat-subtitle {
-  font-size: 16px;
-  font-weight: 400;
-  color: black;
-  opacity: 0.7;
+ font-size: 16px;
+ font-weight: 400;
+ color: black;
+ opacity: 0.7;
 }
 
 .stat-card .stat-revenue {
-  color: #6CC070; /* Warna hijau untuk revenue */
+ color: #6CC070;
 }
 
 /* Filter Bar */
 .filter-bar {
-  display: flex;
-  align-items: center;
-  background: white;
-  border-radius: 20px;
-  padding: 10px;
-  margin-bottom: 20px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+ display: flex;
+ align-items: center;
+ background: white;
+ border-radius: 20px;
+ padding: 10px;
+ margin-bottom: 20px;
+ box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
 .search-field {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 0 15px;
-  flex-grow: 1; /* Mengisi ruang kosong */
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ padding: 0 15px;
+ flex-grow: 1;
 }
 
 .search-field input {
-  border: none;
-  outline: none;
-  width: 100%;
-  font-size: 16px;
-  font-family: 'Poppins', sans-serif;
-  color: #5E3A2F;
+ border: none;
+ outline: none;
+ width: 100%;
+ font-size: 16px;
+ font-family: 'Poppins', sans-serif;
+ color: #5E3A2F;
 }
 .search-field input::placeholder {
-  color: #AAAAAA;
+ color: #AAAAAA;
 }
 
 .filter-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0; /* Mencegah elemen ini menyusut */
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ flex-shrink: 0;
 }
 
 .filter-controls input,
 .filter-controls select,
 .filter-controls .filter-btn {
-  border: 1px solid #E5E5E5;
-  border-radius: 15px;
-  height: 45px;
-  padding: 0 15px;
-  font-size: 16px;
-  font-family: 'Poppins', sans-serif;
-  background: #FAFAFA;
+ border: 1px solid #E5E5E5;
+ border-radius: 15px;
+ height: 45px;
+ padding: 0 15px;
+ font-size: 16px;
+ font-family: 'Poppins', sans-serif;
+ background: #FAFAFA;
 }
 
 .filter-controls .filter-btn {
-  background: white;
-  cursor: pointer;
-  color: #5E3A2F;
+ background: white;
+ cursor: pointer;
+ color: #5E3A2F;
 }
 .filter-controls .filter-btn.active {
-  background: #A86935;
-  color: white;
-  border-color: #A86935;
+ background: #A86935;
+ color: white;
+ border-color: #A86935;
 }
 
 .filter-controls .filter-group-by {
-  background: #5E3A2F;
-  color: white;
-  border-color: #5E3A2F;
+ background: #5E3A2F;
+ color: white;
+ border-color: #5E3A2F;
 }
 
-/* Grid baru untuk tabel income (9 kolom) */
+/* --- 2. Style Tabel (Kode yang Hilang/Rusak) --- */
+.menu-table {
+ background: white;
+ border-radius: 20px;
+ box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+ padding: 20px;
+ overflow-x: auto;
+}
+
+.table-header,
+.table-row {
+ display: grid; /* Perbaikan Utama */
+ align-items: center;
+ gap: 15px;
+ padding: 10px 0;
+}
+
+.table-header {
+ font-weight: 600;
+ color: #5E3A2F;
+ border-bottom: 2px solid #F2E3D5;
+ padding-bottom: 15px;
+ margin-bottom: 10px;
+ font-size: 16px;
+}
+
+.table-row {
+ color: #5E3A2F;
+ border-bottom: 1px solid #F2E3D5;
+}
+
+.table-row:last-child {
+ border-bottom: none;
+}
+
+/* Grid spesifik untuk 9 kolom di halaman ini */
 .income-grid {
-  /* # | Kasir | Timestamp | Menu | Kategori | Unit | U.Price | T.Price | Actions */
-  grid-template-columns: 40px 1.2fr 1.5fr 1.5fr 1fr 0.5fr 0.8fr 0.8fr 1.3fr;
-  font-size: 16px;
+ grid-template-columns: 40px 1.2fr 1.5fr 1.5fr 1fr 0.5fr 0.8fr 0.8fr 1.3fr;
+ font-size: 16px;
 }
 
 .item-cashier,
 .item-timestamp {
-  font-size: 16px;
+ font-size: 16px;
+}
+
+.item-category-cell {
+ display: flex;
+ justify-content: center;
+ align-items: center;
+}
+.item-category-tag {
+ width: 110px;
+ height: 45px;
+ background: #F2E3D5;
+ border-radius: 20px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-size: 18px;
+ font-weight: 500;
+}
+
+.btn-action-edit,
+.btn-action-delete {
+ border: none;
+ border-radius: 20px;
+ height: 45px;
+ width: 80px;
+ font-size: 16px;
+ font-family: 'Poppins', sans-serif;
+ color: white;
+ cursor: pointer;
+ transition: all 0.3s;
+}
+.btn-action-edit {
+ background: #C47E45;
+}
+.btn-action-edit:hover {
+ background: #b36d35;
+}
+.btn-action-delete {
+ background: #D9534F;
+}
+.btn-action-delete:hover {
+ background: #c9302c;
+}
+
+/* --- 3. Perataan Kolom (Permintaan Terakhir) --- */
+
+/* Kolom 5: Category (Center) */
+.table-header.income-grid > div:nth-child(5) {
+  text-align: center;
+}
+
+/* Kolom 6: Units (Center) */
+.table-header.income-grid > div:nth-child(6) {
+  text-align: center;
+}
+.table-row .item-units {
+  text-align: center;
+}
+
+/* Kolom 7 & 8: Price (Right) */
+.table-header.income-grid > div:nth-child(7),
+.table-header.income-grid > div:nth-child(8) {
+  text-align: right;
+}
+.table-row .item-price {
+  text-align: right;
+}
+
+/* Kolom 9: Actions (Right) */
+.table-header.income-grid > div:nth-child(9) {
+  text-align: right;
+}
+.table-row .item-actions {
+  text-align: right;
+}
+
+
+/* Style dasar untuk SEMUA baris (header & data) */
+.table-header,
+.table-row {
+ /* INI ADALAH PERBAIKAN UTAMA: */
+ display: grid; 
+ 
+ align-items: center; /* Membuat item sejajar di tengah (vertikal) */
+ gap: 15px; /* Jarak antar kolom */
+ padding: 10px 0;
+}
+
+/* Style khusus untuk baris header */
+.table-header {
+ font-weight: 600; /* Tebal */
+ color: #5E3A2F;
+ border-bottom: 2px solid #F2E3D5;
+ padding-bottom: 15px;
+ margin-bottom: 10px;
+ font-size: 16px; /* Menyamakan font-size header */
+}
+
+/* Style khusus untuk baris data */
+.table-row {
+ color: #5E3A2F;
+ border-bottom: 1px solid #F2E3D5;
+}
+
+/* Hapus garis bawah di baris data terakhir */
+.table-row:last-child {
+ border-bottom: none;
+}
+
+
+/* Grid baru untuk tabel income (9 kolom) */
+.income-grid {
+ /* # | Kasir | Timestamp | Menu | Kategori | Unit | U.Price | T.Price | Actions */
+ grid-template-columns: 40px 1.2fr 1.5fr 1.5fr 1fr 0.5fr 0.8fr 0.8fr 1.3fr;
+ font-size: 16px;
+}
+
+.item-cashier,
+.item-timestamp {
+ font-size: 16px;
 }
 
 /* Tag Kategori di dalam tabel */
 .item-category-cell {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+ display: flex;
+ justify-content: center;
+ align-items: center;
 }
 .item-category-tag {
-  width: 110px;
-  height: 45px;
-  background: #F2E3D5;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: 500;
+ width: 110px;
+ height: 45px;
+ background: #F2E3D5;
+ border-radius: 20px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-size: 18px;
+ font-weight: 500;
 }
 
 /* Tombol Aksi Baru (Edit/Delete dengan Teks) */
 .btn-action-edit,
 .btn-action-delete {
-  border: none;
-  border-radius: 20px;
-  height: 45px;
-  width: 80px;
-  font-size: 16px;
-  font-family: 'Poppins', sans-serif;
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s;
+ border: none;
+ border-radius: 20px;
+ height: 45px;
+ width: 80px;
+ font-size: 16px;
+ font-family: 'Poppins', sans-serif;
+ color: white;
+ cursor: pointer;
+ transition: all 0.3s;
 }
 .btn-action-edit {
-  background: #C47E45;
+ background: #C47E45;
 }
 .btn-action-edit:hover {
-  background: #b36d35;
+ background: #b36d35;
 }
 .btn-action-delete {
-  background: #D9534F;
+ background: #D9534F;
 }
 .btn-action-delete:hover {
-  background: #c9302c;
+ background: #c9302c;
 }
 
 /* ===============================================

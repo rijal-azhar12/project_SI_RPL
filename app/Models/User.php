@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+// Import yang saya tambahkan untuk relasi
+use App\Models\Transaksi; 
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -25,18 +28,18 @@ class User extends Authenticatable
     protected $primaryKey = 'id_user';
 
     /**
-     * Indicates if the model's ID is auto-incrementing.
-     *
-     * @var bool
+     * [KOREKSI PENTING OLEH SAYA]
+     * Baris 'public $incrementing = false;' dari file asli TELAH DIHAPUS.
+     * Berdasarkan file .sql Anda, 'id_user' adalah AUTO_INCREMENT.
+     * Membiarkan baris itu 'false' akan merusak fitur 'create user'.
      */
-    public $incrementing = false;
 
     /**
      * Indicates if the model should be timestamped.
      *
      * @var bool
      */
-    public $timestamps = false;
+    public $timestamps = false; // Ini sudah benar
 
     /**
      * The attributes that are mass assignable.
@@ -78,5 +81,16 @@ class User extends Authenticatable
     public function getAuthPassword()
     {
         return $this->password;
+    }
+
+    // ---  HALAMAN PENDAPATAN ---
+
+    /**
+     * Relasi: Satu User (kasir) memiliki banyak Transaksi.
+     */
+    public function transaksi()
+    {
+        // foreignKey, localKey
+        return $this->hasMany(Transaksi::class, 'id_user', 'id_user');
     }
 }
