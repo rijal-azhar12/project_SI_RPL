@@ -29,7 +29,7 @@ Route::get('/', function () {
         if (Auth::user()->peran === 'kasir') {
             return redirect('/kasir');
         } elseif (Auth::user()->peran === 'owner') {
-            return redirect('/account');
+            return redirect('/accounts');
         }
     }
     return redirect('/login');
