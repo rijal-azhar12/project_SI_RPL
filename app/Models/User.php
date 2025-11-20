@@ -64,6 +64,17 @@ class User extends Authenticatable
     ];
 
     /**
+     * Set the user's password.
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
+
+    /**
      * Get the name of the unique identifier for the user.
      *
      * @return string
