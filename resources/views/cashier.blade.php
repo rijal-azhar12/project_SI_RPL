@@ -1,5 +1,5 @@
 {{-- Ini adalah resources/views/cashier_food.blade.php (Sekarang berisi SEMUA produk) --}}
-@extends('layouts.kasir') {{-- Tetap menggunakan layout kasir --}}
+@extends('layouts.cashier') {{-- Tetap menggunakan layout kasir --}}
 
 @section('content')
 
