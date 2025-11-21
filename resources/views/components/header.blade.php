@@ -6,32 +6,32 @@
 
     <nav class="nav-menu">
         <a href="{{ url('/menu') }}" class="nav-item ">
-            <span>&#9776;</span>
+            <img src="{{ asset('image/icon_menu.png') }}">
             <span>Menu</span>
         </a>
 
         <a href="{{ url('/pengeluaran') }}" class="nav-item ">
-            <span>$</span>
+            <img src="{{ asset('image/icon_pengeluaran.png') }}">
             <span>Pengeluaran</span>
         </a>
 
         <a href="{{ url('/pemasukan') }}" class="nav-item ">
-            <span>$</span>
+            <img src="{{ asset('image/icon_pemasukan.png') }}">
             <span>Pemasukan</span>
         </a>
 
         <a href="{{ url('/accounts') }}" class="nav-item ">
-            <span>&#128100;</span>
+            <img src="{{ asset('image/icon_akun.png') }}">
             <span>Akun</span>
         </a>
 
         <a href="" class="nav-item owner">
-            <span>&#128100;</span>
+            <img src="{{ asset('image/icon_owner.png') }}">
             <span>Owner</span>
         </a>
 
         <a href="" class="nav-item logout">
-            <span>&#10162;</span>
+            <img src="{{ asset('image/icon_logout.png') }}">
             <span>Logout</span>
         </a>
     </nav>
