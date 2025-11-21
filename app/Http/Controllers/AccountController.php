@@ -8,18 +8,12 @@ use Illuminate\Support\Facades\Hash;
 
 class AccountController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $users = User::all();
         return view('account', ['users' => $users]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -36,24 +30,18 @@ class AccountController extends Controller
             'nama' => $validatedData['nama'],
             'username' => $validatedData['username'],
             'password' => $validatedData['password'],
-            'peran' => $request->input('peran', 'kasir'), // Default role to 'kasir'
+            'peran' => $request->input('peran', 'kasir'),
         ]);
 
         return response()->json(['success' => true, 'message' => 'Account created successfully.']);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $account) // Using $account for route model binding
+    public function show(User $account)
     {
         return response()->json($account);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, User $account) // Using $account for route model binding
+    public function update(Request $request, User $account)
     {
         $rules = [
             'nama' => 'required|string|max:255',
@@ -71,17 +59,14 @@ class AccountController extends Controller
         if ($request->filled('password')) {
             $account->password = $validatedData['password'];
         }
-        $account->peran = $request->input('peran', $account->peran); // Allow role update, default to current role
+        $account->peran = $request->input('peran', $account->peran);
 
         $account->save();
 
         return response()->json(['success' => true, 'message' => 'Account updated successfully.']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(User $account) // Using $account for route model binding
+    public function destroy(User $account)
     {
         $account->delete();
         return response()->json(['success' => true, 'message' => 'Account deleted successfully.']);
