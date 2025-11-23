@@ -15,7 +15,7 @@
 
     body {
         font-family: 'Poppins', sans-serif;
-        background: linear-gradient(135deg, #f8f4f0 0%, #f2e3d5 50%, #e8d5c3 100%);
+        background: linear-gradient(90deg, rgba(232, 213, 195, 1) 0%, rgba(242, 227, 213, 1) 50%, rgba(196, 126, 69, 1) 100%);
         min-height: 100vh;
         display: flex;
         justify-content: center;
