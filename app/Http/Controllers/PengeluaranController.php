@@ -18,7 +18,7 @@ class PengeluaranController extends Controller
         $data_pengeluaran = Pengeluaran::all();
 
         // Mengirim data ke view 'expense' dan menampilkannya
-        return view('expense', ['data_pengeluaran' => $data_pengeluaran]);
+        return view('pengeluaran', ['data_pengeluaran' => $data_pengeluaran]);
     }
 
     /**
