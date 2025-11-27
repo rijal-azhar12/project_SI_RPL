@@ -15,7 +15,7 @@
             <span>Pengeluaran</span>
         </a>
 
-        <a href="{{ url('/pemasukan') }}" class="nav-item ">
+        <a href="{{ url('/income') }}" class="nav-item ">
             <img src="{{ asset('image/icon_pemasukan.png') }}">
             <span>Pemasukan</span>
         </a>

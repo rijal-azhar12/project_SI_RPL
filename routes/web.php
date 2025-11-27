@@ -30,8 +30,8 @@ Route::get('/cashier', function () {
 
 Route::middleware(['auth', 'owner'])->group(function () {});
 
-Route::get('/pemasukan', [IncomeController::class, 'index'])->name('pemasukan.index');
-Route::delete('/pemasukan/{id_detail}', [IncomeController::class, 'destroy'])->name('pemasukan.destroy');
+Route::get('/income', [IncomeController::class, 'index'])->name('income.index');
+Route::delete('/income/{id_detail}', [IncomeController::class, 'destroy'])->name('income.destroy');
 
 Route::get('/pengeluaran', [PengeluaranController::class, 'index'])->name('pengeluaran.index');
 Route::post('/pengeluaran', [PengeluaranController::class, 'store'])->name('pengeluaran.store');
