@@ -21,9 +21,13 @@
     </div>
     @endif
 
-    @if (session('error'))
+    @if ($errors->any())
     <div class="alert alert-danger">
-        {{ session('error') }}
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
     </div>
     @endif
 
@@ -43,7 +47,8 @@
             <div class="item-username">{{ $user->username }}</div>
             <div class="item-peran">{{ $user->peran }}</div>
             <div class="item-actions">
-                <button class="action-btn edit-btn" data-id="{{ $user->id_user }}">
+                <button class="action-btn edit-btn" data-id="{{ $user->id_user }}" data-nama="{{ $user->nama }}"
+                    data-username="{{ $user->username }}" data-peran="{{ $user->peran }}">
                     <img src="{{ asset('image/icon_edit.png') }}" alt="Edit">
                 </button>
                 <button class="action-btn delete-btn" data-id="{{ $user->id_user }}">
@@ -67,8 +72,9 @@
             <h2 class="modal-title" id="accountModalTitle"></h2>
             <span class="close-btn" id="closeAccountModal">X</span>
         </div>
-        <form id="accountForm">
-            <input type="hidden" id="accountId" name="id">
+        <form id="accountForm" method="POST" action="">
+            @csrf
+            <input type="hidden" name="_method" id="formMethod" value="POST">
             <div class="form-group">
                 <label for="accountName">Nama *</label>
                 <input type="text" id="accountName" name="nama" required>
@@ -80,19 +86,15 @@
             <div class="form-group">
                 <label for="accountRole">Peran *</label>
                 <select id="accountRole" name="peran" required>
-                    <option value="owner">Owner</option>
-                    <option value="kasir">Kasir</option>
+                    <option value="">Pilih Peran</option>
+                    <option value="Owner">Owner</option>
+                    <option value="Kasir">Kasir</option>
                 </select>
             </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="accountPassword">Password *</label>
-                    <input type="password" id="accountPassword" name="password">
-                </div>
-                <div class="form-group">
-                    <label for="accountPasswordConfirm">Confirm Password *</label>
-                    <input type="password" id="accountPasswordConfirm" name="password_confirmation">
-                </div>
+            <div class="form-group">
+                <label for="accountPassword">Password</label>
+                <input type="password" id="accountPassword" name="password">
+                <small>Kosongkan jika tidak ingin mengubah password.</small>
             </div>
             <div class="form-actions">
                 <button type="button" class="btn btn-secondary" id="cancelAccountBtn">Batal</button>
@@ -105,181 +107,92 @@
 <div class="modal confirmation-modal" id="deleteAccountModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h2 class="modal-title">Hapus Akun</h2>
+            <h2 class="modal-title" id="deleteModalTitle"></h2>
             <span class="close-btn" id="closeDeleteAccountModal">&times;</span>
         </div>
         <p class="confirmation-text">Apakah anda yakin ingin menghapus akun ini?</p>
         <div class="form-actions">
             <button type="button" class="btn btn-secondary" id="cancelDeleteAccountBtn">Batal</button>
-            <button type="button" class="btn btn-danger" id="confirmDeleteAccountBtn">Hapus</button>
+            <form id="deleteForm" method="POST" action="">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger">Hapus</button>
+            </form>
         </div>
     </div>
 </div>
-@endsection
 
-@section('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
     const accountModal = document.getElementById('accountModal');
     const deleteAccountModal = document.getElementById('deleteAccountModal');
-
     const accountForm = document.getElementById('accountForm');
-    const accountIdField = document.getElementById('accountId');
-    const accountNameField = document.getElementById('accountName');
-    const accountUsernameField = document.getElementById('accountUsername');
-    const accountRoleField = document.getElementById('accountRole');
-    const accountPasswordField = document.getElementById('accountPassword');
-    const accountPasswordConfirmField = document.getElementById('accountPasswordConfirm');
+    const deleteForm = document.getElementById('deleteForm');
     const accountModalTitle = document.getElementById('accountModalTitle');
+    const deleteModalTitle = document.getElementById('deleteModalTitle');
+    const formMethod = document.getElementById('formMethod');
 
     const addAccountBtn = document.getElementById('addAccountBtn');
     const closeAccountModal = document.getElementById('closeAccountModal');
     const cancelAccountBtn = document.getElementById('cancelAccountBtn');
     const closeDeleteAccountModal = document.getElementById('closeDeleteAccountModal');
     const cancelDeleteAccountBtn = document.getElementById('cancelDeleteAccountBtn');
-    const confirmDeleteAccountBtn = document.getElementById('confirmDeleteAccountBtn');
-
-    let currentAccountId = null;
-
-    const closeModal = () => {
-        accountModal.classList.remove('active');
-        deleteAccountModal.classList.remove('active');
-    };
 
     addAccountBtn.addEventListener('click', () => {
         accountForm.reset();
-        accountIdField.value = '';
-        accountModalTitle.textContent = 'Add Account';
-        accountPasswordField.required = true;
-        accountPasswordConfirmField.required = true;
-        accountModal.classList.add('active');
-        accountForm.setAttribute('data-action', 'add');
+        accountModalTitle.textContent = 'Tambah Akun';
+        accountForm.setAttribute('action', '{{ route("accounts.store") }}');
+        formMethod.value = 'POST';
+        document.getElementById('accountPassword').required = true;
+        accountModal.style.display = 'block';
     });
 
-    // Open Edit Account Modal
-    document.querySelectorAll('.edit-account-btn').forEach(button => {
+    document.querySelectorAll('.edit-btn').forEach(button => {
         button.addEventListener('click', function() {
-            currentAccountId = this.getAttribute('data-id');
+            const id = this.dataset.id;
+            const nama = this.dataset.nama;
+            const username = this.dataset.username;
+            const peran = this.dataset.peran;
 
-            fetch(`/accounts/${currentAccountId}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    accountIdField.value = data.id_user;
-                    accountNameField.value = data.nama;
-                    accountUsernameField.value = data.username;
-                    accountRoleField.value = data.peran;
-                    accountPasswordField.value = ''; // Clear password fields for security
-                    accountPasswordConfirmField.value = '';
-                    accountPasswordField.required =
-                        false; // Password not required for edit unless changed
-                    accountPasswordConfirmField.required = false;
+            accountModalTitle.textContent = `Edit Akun #${id}`;
+            accountForm.setAttribute('action', `/accounts/${id}`);
+            formMethod.value = 'PUT';
 
-                    accountModalTitle.textContent = 'Edit Account';
-                    accountModal.classList.add('active');
-                    accountForm.setAttribute('data-action', 'edit');
-                })
-                .catch(error => {
-                    console.error('Error fetching account data:', error);
-                    alert('Failed to fetch account details. Please try again.');
-                });
+            document.getElementById('accountName').value = nama;
+            document.getElementById('accountUsername').value = username;
+            document.getElementById('accountRole').value = peran;
+            document.getElementById('accountPassword').required = false;
+
+            accountModal.style.display = 'block';
         });
     });
 
-    // Open Delete Account Confirmation Modal
-    document.querySelectorAll('.delete-account-btn').forEach(button => {
+    document.querySelectorAll('.delete-btn').forEach(button => {
         button.addEventListener('click', function() {
-            currentAccountId = this.getAttribute('data-id');
-            deleteAccountModal.classList.add('active');
+            const id = this.dataset.id;
+            deleteModalTitle.textContent = `Hapus Akun #${id}`;
+            deleteForm.setAttribute('action', `/accounts/${id}`);
+            deleteAccountModal.style.display = 'block';
         });
     });
 
-    // Close modal event listeners
+    function closeModal() {
+        accountModal.style.display = 'none';
+        deleteAccountModal.style.display = 'none';
+    }
+
     closeAccountModal.addEventListener('click', closeModal);
     cancelAccountBtn.addEventListener('click', closeModal);
     closeDeleteAccountModal.addEventListener('click', closeModal);
     cancelDeleteAccountBtn.addEventListener('click', closeModal);
 
-    // Handle form submission for Add and Edit
-    accountForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const action = accountForm.getAttribute('data-action');
-        const id = accountIdField.value;
-        let url = '{{ route("accounts.store") }}';
-        let method = 'POST';
-
-        if (action === 'edit') {
-            url = `/accounts/${id}`;
-            method = 'PUT';
+    window.addEventListener('click', function(event) {
+        if (event.target == accountModal) {
+            closeModal();
         }
-
-        const formData = {
-            nama: accountNameField.value,
-            username: accountUsernameField.value,
-            peran: accountRoleField.value,
-            password: accountPasswordField.value,
-            password_confirmation: accountPasswordConfirmField.value,
-        };
-
-        fetch(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(data.message);
-                    window.location.reload();
-                } else {
-                    let errorMessage = 'Failed to save account. Please check your input.';
-                    if (data.errors) {
-                        errorMessage += '\n\n' + Object.values(data.errors).map(e => e.join(', '))
-                            .join('\n');
-                    }
-                    alert(errorMessage);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred on the server.');
-            });
-    });
-
-    // Handle Delete Confirmation
-    confirmDeleteAccountBtn.addEventListener('click', function() {
-        fetch(`/accounts/${currentAccountId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(data.message);
-                    window.location.reload();
-                } else {
-                    alert('Failed to delete account.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred on the server.');
-            });
+        if (event.target == deleteAccountModal) {
+            closeModal();
+        }
     });
 });
 </script>

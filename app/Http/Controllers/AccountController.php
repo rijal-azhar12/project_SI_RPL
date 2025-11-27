@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Pengguna;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -10,65 +10,70 @@ class AccountController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $users = Pengguna::all();
         return view('account', ['users' => $users]);
+    }
+
+    public function create()
+    {
+        return view('account_create');
     }
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'nama' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:user',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:8',
+            'peran' => 'required|string|in:owner,kasir',
         ]);
 
-        $lastId = User::max('id_user');
-        $newId = $lastId ? $lastId + 1 : 1;
-
-        $user = User::create([
-            'id_user' => $newId,
-            'nama' => $validatedData['nama'],
-            'username' => $validatedData['username'],
-            'password' => $validatedData['password'],
-            'peran' => $request->input('peran', 'kasir'),
+        Pengguna::create([
+            'nama' => $request->nama,
+            'username' => $request->username,
+            'password' => Hash::make($request->password),
+            'peran' => $request->peran,
         ]);
 
-        return response()->json(['success' => true, 'message' => 'Account created successfully.']);
+        return redirect()->route('accounts.index')->with('success', 'Akun berhasil ditambahkan!');
     }
 
-    public function show(User $account)
+    public function show(Pengguna $account) {}
+
+    public function edit(Pengguna $account)
     {
-        return response()->json($account);
+        return view('account_edit', ['user' => $account]);
     }
 
-    public function update(Request $request, User $account)
+    public function update(Request $request, Pengguna $account)
     {
         $rules = [
             'nama' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:user,username,' . $account->id_user . ',id_user',
+            'peran' => 'required|string|in:owner,kasir',
         ];
 
         if ($request->filled('password')) {
-            $rules['password'] = 'required|string|min:8|confirmed';
+            $rules['password'] = 'required|string|min:8';
         }
 
-        $validatedData = $request->validate($rules);
+        $request->validate($rules);
 
-        $account->nama = $validatedData['nama'];
-        $account->username = $validatedData['username'];
+        $account->nama = $request->nama;
+        $account->username = $request->username;
         if ($request->filled('password')) {
-            $account->password = $validatedData['password'];
+            $account->password = Hash::make($request->password);
         }
-        $account->peran = $request->input('peran', $account->peran);
+        $account->peran = $request->peran;
 
         $account->save();
 
-        return response()->json(['success' => true, 'message' => 'Account updated successfully.']);
+        return redirect()->route('accounts.index')->with('success', 'Akun berhasil diperbarui!');
     }
 
-    public function destroy(User $account)
+    public function destroy(Pengguna $account)
     {
         $account->delete();
-        return response()->json(['success' => true, 'message' => 'Account deleted successfully.']);
+        return redirect()->route('accounts.index')->with('success', 'Akun berhasil dihapus!');
     }
 }
