@@ -94,7 +94,6 @@
             <div class="form-group">
                 <label for="accountPassword">Password</label>
                 <input type="password" id="accountPassword" name="password">
-                <small>Kosongkan jika tidak ingin mengubah password.</small>
             </div>
             <div class="form-actions">
                 <button type="button" class="btn btn-secondary" id="cancelAccountBtn">Batal</button>
@@ -108,7 +107,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <h2 class="modal-title" id="deleteModalTitle"></h2>
-            <span class="close-btn" id="closeDeleteAccountModal">&times;</span>
+            <span class="close-btn" id="closeDeleteAccountModal">X</span>
         </div>
         <p class="confirmation-text">Apakah anda yakin ingin menghapus akun ini?</p>
         <div class="form-actions">
