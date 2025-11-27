@@ -35,7 +35,7 @@ class AccountController extends Controller
             'peran' => $request->peran,
         ]);
 
-        return redirect()->route('accounts.index')->with('success', 'Akun berhasil ditambahkan!');
+        return redirect()->route('account.index')->with('success', 'Akun berhasil ditambahkan!');
     }
 
     public function show(Pengguna $account) {}
@@ -68,12 +68,12 @@ class AccountController extends Controller
 
         $account->save();
 
-        return redirect()->route('accounts.index')->with('success', 'Akun berhasil diperbarui!');
+        return redirect()->route('account.index')->with('success', 'Akun berhasil diperbarui!');
     }
 
     public function destroy(Pengguna $account)
     {
         $account->delete();
-        return redirect()->route('accounts.index')->with('success', 'Akun berhasil dihapus!');
+        return redirect()->route('account.index')->with('success', 'Akun berhasil dihapus!');
     }
 }

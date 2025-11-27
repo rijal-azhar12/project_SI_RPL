@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
     addAccountBtn.addEventListener('click', () => {
         accountForm.reset();
         accountModalTitle.textContent = 'Tambah Akun';
-        accountForm.setAttribute('action', '{{ route("accounts.store") }}');
+        accountForm.setAttribute('action', '{{ route("account.store") }}');
         formMethod.value = 'POST';
         document.getElementById('accountPassword').required = true;
         accountModal.style.display = 'block';
@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const peran = this.dataset.peran;
 
             accountModalTitle.textContent = `Edit Akun #${id}`;
-            accountForm.setAttribute('action', `/accounts/${id}`);
+            accountForm.setAttribute('action', `/account/${id}`);
             formMethod.value = 'PUT';
 
             document.getElementById('accountName').value = nama;
@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', function() {
             const id = this.dataset.id;
             deleteModalTitle.textContent = `Hapus Akun #${id}`;
-            deleteForm.setAttribute('action', `/accounts/${id}`);
+            deleteForm.setAttribute('action', `/account/${id}`);
             deleteAccountModal.style.display = 'block';
         });
     });
