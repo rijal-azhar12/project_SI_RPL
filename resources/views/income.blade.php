@@ -1,4 +1,4 @@
-{{-- Ini adalah isi BARU untuk resources/views/pemasukan.blade.php --}}
+{{-- Ini adalah isi BARU untuk resources/views/income.blade.php --}}
 @extends('layouts.app')
 
 @section('content')
@@ -48,13 +48,13 @@
 
         <div class="filter-controls">
             {{-- Tombol filter kini menjadi link (<a>) --}}
-            <a href="{{ route('pemasukan.index', ['filter' => 'Day']) }}"
+            <a href="{{ route('income.index', ['filter' => 'Day']) }}"
                 class="filter-btn {{ $filter == 'Day' ? 'active' : '' }}">Day</a>
 
-            <a href="{{ route('pemasukan.index', ['filter' => 'Week']) }}"
+            <a href="{{ route('income.index', ['filter' => 'Week']) }}"
                 class="filter-btn {{ $filter == 'Week' ? 'active' : '' }}">Week</a>
 
-            <a href="{{ route('pemasukan.index', ['filter' => 'Month']) }}"
+            <a href="{{ route('income.index', ['filter' => 'Month']) }}"
                 class="filter-btn {{ $filter == 'Month' ? 'active' : '' }}">Month</a>
 
             {{-- Hapus 'Group by' jika tidak diperlukan, atau sesuaikan nanti --}}
@@ -81,9 +81,11 @@
             <div class="item-number">{{ $loop->iteration }}</div>
             {{-- Cek jika relasi ada untuk menghindari error --}}
             <div class="item-cashier">{{ $income->transaksi->user->id_user ?? 'N/A' }} -
-                {{ $income->transaksi->user->nama ?? 'N/A' }}</div>
+                {{ $income->transaksi->user->nama ?? 'N/A' }}
+            </div>
             <div class="item-timestamp">
-                {{ \Carbon\Carbon::parse($income->transaksi->tanggal_transaksi)->format('d-M-Y, H:i:s') }}</div>
+                {{ \Carbon\Carbon::parse($income->transaksi->tanggal_transaksi)->format('d-M-Y, H:i:s') }}
+            </div>
             <div class="item-name">{{ $income->menu->nama_menu ?? 'Menu Dihapus' }}</div>
             <div class="item-category-cell">
                 <div class="item-category-tag">{{ $income->menu->kategori_menu ?? 'N/A' }}</div>
@@ -169,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function() {
         confirmDeleteIncomeBtn.addEventListener("click", () => {
             if (!currentIncomeId) return;
 
-            const url = `/pemasukan/${currentIncomeId}`;
+            const url = `/income/${currentIncomeId}`;
 
             fetch(url, {
                     method: 'DELETE',
