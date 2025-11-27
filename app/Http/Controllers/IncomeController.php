@@ -5,118 +5,201 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\Transaksi;
 use App\Models\TransaksiDetail;
 use App\Models\Menu;
+use App\Models\User;
 use Carbon\Carbon;
 
 class IncomeController extends Controller
 {
-    /**
-     * Menampilkan halaman manajemen pendapatan (incomes).
-     */
     public function index(Request $request)
     {
-        $user = Auth::user(); // $user akan menjadi NULL jika tidak ada login, dan itu tidak apa-apa
-        $filter = $request->input('filter', 'Month'); // Default filter 'Month'
+        $user = Auth::user();
+        $filter = $request->input('filter', 'Month');
         $now = Carbon::now();
 
-        // Tentukan rentang tanggal berdasarkan filter
         if ($filter == 'Day') {
             $startDate = $now->copy()->startOfDay();
             $endDate = $now->copy()->endOfDay();
         } elseif ($filter == 'Week') {
             $startDate = $now->copy()->startOfWeek();
             $endDate = $now->copy()->endOfWeek();
-        } else { // Default 'Month'
+        } else {
             $startDate = $now->copy()->startOfMonth();
             $endDate = $now->copy()->endOfMonth();
         }
 
-        // --- 1. MEMBUAT KUERI DASAR (BASE QUERY) ---
-        // Kueri dasar dimulai dari TransaksiDetail
-        $baseQuery = TransaksiDetail::query()
-            ->join('transaksi', 'transaksi_detail.id_transaksi', '=', 'transaksi.id_transaksi')
-            ->whereBetween('transaksi.tanggal_transaksi', [$startDate, $endDate]);
+        $baseQuery = Transaksi::query()
+            ->whereBetween('tanggal_transaksi', [$startDate, $endDate])
+            ->with('user', 'details.menu');
 
-        // Filter berdasarkan peran: 'kasir' hanya lihat data sendiri, 'owner' lihat semua
-
-        // --- PERBAIKAN DI SINI ---
-        // Kita cek dulu $user ADA (tidak null), baru cek perannya.
         if ($user && $user->peran == 'kasir') {
-            $baseQuery->where('transaksi.id_user', $user->id_user);
+            $baseQuery->where('id_user', $user->id_user);
         }
-        // Jika $user null (tidak login), if() ini akan di-skip, 
-        // dan Anda akan melihat data sebagai 'owner' (melihat semua).
 
-        // --- 2. MENGHITUNG STATISTIK (DARI KUERI DASAR) ---
+        $transaksiRecords = $baseQuery->get();
 
-        // A. Total Revenue
-        $totalRevenue = $baseQuery->clone()->sum('transaksi_detail.subtotal');
+        // Initialize statistics
+        $totalRevenue = 0;
+        $totalUnitsSold = 0;
+        $topSellingItems = [];
 
-        // B. Total Units Sold
-        $totalUnitsSold = $baseQuery->clone()->sum('transaksi_detail.jumlah_item');
+        foreach ($transaksiRecords as $tr) {
+            foreach ($tr->details as $detail) {
+                $totalRevenue += $detail->subtotal;
+                $totalUnitsSold += $detail->jumlah_item;
+                $menuName = $detail->menu->nama_menu ?? 'Unknown Menu';
+                $topSellingItems[$menuName] = ($topSellingItems[$menuName] ?? 0) + $detail->jumlah_item;
+            }
+        }
 
-        // C. Top Selling Item
-        $topSellingItem = $baseQuery->clone()
-            ->join('menu', 'transaksi_detail.id_menu', '=', 'menu.id_menu')
-            ->select('menu.nama_menu', DB::raw('SUM(transaksi_detail.jumlah_item) as total_terjual'))
-            ->groupBy('transaksi_detail.id_menu', 'menu.nama_menu') // Grup berdasarkan ID dan Nama
-            ->orderByDesc('total_terjual')
-            ->first(); // Ambil yang paling atas
+        arsort($topSellingItems);
+        $topSellingItem = null;
+        if (!empty($topSellingItems)) {
+            $topSellingItemName = array_key_first($topSellingItems);
+            $topSellingItem = (object)['nama_menu' => $topSellingItemName, 'total_terjual' => $topSellingItems[$topSellingItemName]];
+        }
 
-        // --- 3. MENGAMBIL DATA UNTUK TABEL (DARI KUERI DASAR) ---
+        $incomes = Transaksi::with('user', 'details.menu')
+            ->whereBetween('tanggal_transaksi', [$startDate, $endDate]);
 
-        // Buat kueri baru untuk list tabel agar bisa pakai Eloquent 'with'
-        $tableQuery = TransaksiDetail::with(['transaksi.user', 'menu'])
-            ->whereHas('transaksi', function ($q) use ($startDate, $endDate, $user) {
-                $q->whereBetween('tanggal_transaksi', [$startDate, $endDate]);
+        if ($user && $user->peran == 'kasir') {
+            $incomes->where('id_user', $user->id_user);
+        }
 
-                // Filter kasir lagi di sini untuk relasi
+        $incomes = $incomes->orderByDesc('tanggal_transaksi')->paginate(10);
 
-                // --- PERBAIKAN KEDUA DI SINI ---
-                // Kita juga perlu cek $user && ... di dalam 'whereHas'
-                if ($user && $user->peran == 'kasir') {
-                    $q->where('id_user', $user->id_user);
-                }
-            });
-
-        $incomes = $tableQuery->orderByDesc('id_detail')->paginate(10); // Ambil 10 data per halaman
-
-        // --- 4. KIRIM DATA KE VIEW ---
-        // Ini sudah benar merujuk ke 'pemasukan'
         return view('income', [
             'totalRevenue' => $totalRevenue,
             'totalUnitsSold' => $totalUnitsSold,
             'topSellingItem' => $topSellingItem,
             'incomes' => $incomes,
             'filter' => $filter,
-            'filterPeriod' => $startDate->format('d M') . ' - ' . $endDate->format('d M Y')
+            'filterPeriod' => $startDate->format('d M') . ' - ' . $endDate->format('d M Y'),
+            'users' => User::where('peran', 'kasir')->get()
         ]);
     }
 
-    /**
-     * Menghapus data pendapatan (transaksi_detail).
-     */
-    public function destroy($id_detail)
+    public function create()
+    {
+        $users = User::where('peran', 'kasir')->get();
+        return view('income_create', compact('users'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'id_user' => 'required|exists:users,id_user',
+            'tanggal_transaksi' => 'required|date',
+            'menu_items' => 'array',
+            'menu_items.*.id_menu' => 'required|exists:menu,id_menu',
+            'menu_items.*.jumlah_item' => 'required|integer|min:1',
+            'menu_items.*.harga_item' => 'required|numeric|min:0',
+        ]);
+
+        $transaksi = Transaksi::create([
+            'id_user' => $request->id_user,
+            'tanggal_transaksi' => $request->tanggal_transaksi,
+        ]);
+
+        if ($request->has('menu_items')) {
+            foreach ($request->menu_items as $item) {
+                $menu = Menu::find($item['id_menu']);
+                if ($menu) {
+                    TransaksiDetail::create([
+                        'id_transaksi' => $transaksi->id_transaksi,
+                        'id_menu' => $menu->id_menu,
+                        'jumlah_item' => $item['jumlah_item'],
+                        'harga_item' => $item['harga_item'],
+                        'subtotal' => $item['jumlah_item'] * $item['harga_item'],
+                    ]);
+                }
+            }
+        }
+
+        return redirect()->route('income.index')->with('success', 'Transaksi berhasil ditambahkan!');
+    }
+
+    public function show(Transaksi $income)
+    {
+        return view('income_show', compact('income'));
+    }
+
+    public function edit(Transaksi $income)
+    {
+        $users = User::where('peran', 'kasir')->get();
+        $menus = Menu::all();
+        $income->load('details.menu');
+        return view('income_edit', compact('income', 'users', 'menus'));
+    }
+
+    public function update(Request $request, Transaksi $income)
+    {
+        $request->validate([
+            'id_user' => 'required|exists:users,id_user',
+            'tanggal_transaksi' => 'required|date',
+            'menu_items' => 'array',
+            'menu_items.*.id_detail' => 'nullable|exists:transaksi_detail,id_detail', // For existing details
+            'menu_items.*.id_menu' => 'required|exists:menu,id_menu',
+            'menu_items.*.jumlah_item' => 'required|integer|min:1',
+            'menu_items.*.harga_item' => 'required|numeric|min:0',
+        ]);
+
+        $income->update([
+            'id_user' => $request->id_user,
+            'tanggal_transaksi' => $request->tanggal_transaksi,
+        ]);
+
+        $existingDetailIds = $income->details->pluck('id_detail')->toArray();
+        $updatedDetailIds = [];
+
+        if ($request->has('menu_items')) {
+            foreach ($request->menu_items as $item) {
+                if (isset($item['id_detail']) && $item['id_detail']) {
+                    $detail = TransaksiDetail::find($item['id_detail']);
+                    if ($detail && $detail->id_transaksi == $income->id_transaksi) {
+                        $menu = Menu::find($item['id_menu']);
+                        $detail->update([
+                            'id_menu' => $menu->id_menu,
+                            'jumlah_item' => $item['jumlah_item'],
+                            'harga_item' => $item['harga_item'],
+                            'subtotal' => $item['jumlah_item'] * $item['harga_item'],
+                        ]);
+                        $updatedDetailIds[] = $item['id_detail'];
+                    }
+                } else {
+                    $menu = Menu::find($item['id_menu']);
+                    if ($menu) {
+                        $newDetail = TransaksiDetail::create([
+                            'id_transaksi' => $income->id_transaksi,
+                            'id_menu' => $menu->id_menu,
+                            'jumlah_item' => $item['jumlah_item'],
+                            'harga_item' => $item['harga_item'],
+                            'subtotal' => $item['jumlah_item'] * $item['harga_item'],
+                        ]);
+                        $updatedDetailIds[] = $newDetail->id_detail;
+                    }
+                }
+            }
+        }
+
+        $detailsToDelete = array_diff($existingDetailIds, $updatedDetailIds);
+        TransaksiDetail::whereIn('id_detail', $detailsToDelete)->delete();
+
+
+        return redirect()->route('income.index')->with('success', 'Transaksi berhasil diperbarui!');
+    }
+
+    public function destroy(Transaksi $income)
     {
         try {
-            // Temukan detail transaksi
-            $transaksiDetail = TransaksiDetail::findOrFail($id_detail);
+            $income->details()->delete();
+            $income->delete();
 
-            // (Opsional) Cek otorisasi jika perlu:
-            $user = Auth::user(); // Ambil user (bisa null)
-
-            // --- PERBAIKAN KETIGA (PREVENTIF) ---
-            // Saya perbaiki juga di dalam komentar, jika nanti Anda aktifkan.
-            // if ($user && $user->peran == 'kasir' && $transaksiDetail->transaksi->id_user != $user->id_user) {
-            //     return response()->json(['message' => 'Unauthorized'], 403);
-            // }
-
-            $transaksiDetail->delete();
-
-            return response()->json(['message' => 'Income record deleted successfully.']);
+            return response()->json(['message' => 'Transaksi record deleted successfully.']);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Error deleting record.'], 500);
+            return response()->json(['message' => 'Error deleting record.', 'error' => $e->getMessage()], 500);
         }
     }
 }
