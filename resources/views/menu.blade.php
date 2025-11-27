@@ -106,8 +106,8 @@
                     <label for="kategori_menu">Kategori *</label>
                     <select id="kategori_menu" name="kategori_menu" required>
                         <option value="">Pilih Kategori</option>
-                        <option value="Drink">Minuman</option>
                         <option value="Food">Makanan</option>
+                        <option value="Drink">Minuman</option>
                     </select>
                 </div>
                 <div class="form-group">
