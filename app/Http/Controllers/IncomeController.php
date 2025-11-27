@@ -39,7 +39,7 @@ class IncomeController extends Controller
             ->whereBetween('transaksi.tanggal_transaksi', [$startDate, $endDate]);
 
         // Filter berdasarkan peran: 'kasir' hanya lihat data sendiri, 'owner' lihat semua
-        
+
         // --- PERBAIKAN DI SINI ---
         // Kita cek dulu $user ADA (tidak null), baru cek perannya.
         if ($user && $user->peran == 'kasir') {
@@ -65,14 +65,14 @@ class IncomeController extends Controller
             ->first(); // Ambil yang paling atas
 
         // --- 3. MENGAMBIL DATA UNTUK TABEL (DARI KUERI DASAR) ---
-        
+
         // Buat kueri baru untuk list tabel agar bisa pakai Eloquent 'with'
         $tableQuery = TransaksiDetail::with(['transaksi.user', 'menu'])
             ->whereHas('transaksi', function ($q) use ($startDate, $endDate, $user) {
                 $q->whereBetween('tanggal_transaksi', [$startDate, $endDate]);
-                
+
                 // Filter kasir lagi di sini untuk relasi
-                
+
                 // --- PERBAIKAN KEDUA DI SINI ---
                 // Kita juga perlu cek $user && ... di dalam 'whereHas'
                 if ($user && $user->peran == 'kasir') {
@@ -84,12 +84,12 @@ class IncomeController extends Controller
 
         // --- 4. KIRIM DATA KE VIEW ---
         // Ini sudah benar merujuk ke 'pemasukan'
-        return view('pemasukan', [ 
+        return view('income', [
             'totalRevenue' => $totalRevenue,
             'totalUnitsSold' => $totalUnitsSold,
             'topSellingItem' => $topSellingItem,
             'incomes' => $incomes,
-            'filter' => $filter, 
+            'filter' => $filter,
             'filterPeriod' => $startDate->format('d M') . ' - ' . $endDate->format('d M Y')
         ]);
     }
@@ -102,10 +102,10 @@ class IncomeController extends Controller
         try {
             // Temukan detail transaksi
             $transaksiDetail = TransaksiDetail::findOrFail($id_detail);
-            
+
             // (Opsional) Cek otorisasi jika perlu:
             $user = Auth::user(); // Ambil user (bisa null)
-            
+
             // --- PERBAIKAN KETIGA (PREVENTIF) ---
             // Saya perbaiki juga di dalam komentar, jika nanti Anda aktifkan.
             // if ($user && $user->peran == 'kasir' && $transaksiDetail->transaksi->id_user != $user->id_user) {
@@ -115,7 +115,6 @@ class IncomeController extends Controller
             $transaksiDetail->delete();
 
             return response()->json(['message' => 'Income record deleted successfully.']);
-
         } catch (\Exception $e) {
             return response()->json(['message' => 'Error deleting record.'], 500);
         }
