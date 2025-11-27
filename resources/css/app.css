@@ -88,7 +88,7 @@ body {
     background: rgb(240, 240, 240);
 }
 
-/* Page */
+/* Page (Menu) */
 
 .container {
     max-width: 1500px;
@@ -165,7 +165,7 @@ body {
     color: #571515;
 }
 
-/* Table */
+/* Table (Menu) */
 
 .table {
     width: 100%;
@@ -179,31 +179,30 @@ body {
 .table-header {
     display: grid;
     grid-template-columns: 50px 100px 1fr 50px 1fr 150px 100px 125px;
-    padding: 15px 25px;
+    padding: 10px 0px;
     background: white;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 500;
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 2px solid #f2e3d5;
     color: #5e3a2f;
-}
-
-.table-header > div:nth-child(1),
-.table-header > div:nth-child(2),
-.table-header > div:nth-child(3),
-.table-header > div:nth-child(4),
-.table-header > div:nth-child(5),
-.table-header > div:nth-child(6),
-.table-header > div:nth-child(7),
-.table-header > div:nth-child(8) {
+    align-items: center;
+    gap: 15px;
     text-align: center;
 }
 
 .table-row {
     display: grid;
     grid-template-columns: 50px 100px 1fr 50px 1fr 150px 100px 125px;
-    padding: 12px 25px;
+    padding: 10px 0;
     align-items: center;
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid #f2e3d5;
+    gap: 15px;
+    color: #5e3a2f;
+    text-align: center;
+}
+
+.table-row:last-child {
+    border-bottom: none;
 }
 
 .item-number {
@@ -294,7 +293,7 @@ body {
     height: 25px;
 }
 
-/* Modal */
+/* Modal (Menu) */
 
 .modal {
     display: none;
@@ -587,6 +586,16 @@ body {
     }
 }
 
+.account {
+    grid-template-columns: 50px 1fr 1fr 1fr 150px;
+}
+
+.account .item-name,
+.account .item-username,
+.account .item-password {
+    font-size: 16px;
+}
+
 /* Halaman Expense */
 
 .page-header-expense {
@@ -815,8 +824,6 @@ body {
     background: #c9302c;
 }
 
-/* --- 3. Perataan Kolom (Permintaan Terakhir) --- */
-
 /* Kolom 5: Category (Center) */
 .table-header.income-grid > div:nth-child(5) {
     text-align: center;
@@ -826,53 +833,16 @@ body {
 .table-header.income-grid > div:nth-child(6) {
     text-align: center;
 }
-.table-row .item-units {
-    text-align: center;
-}
 
 /* Kolom 7 & 8: Price (Right) */
 .table-header.income-grid > div:nth-child(7),
 .table-header.income-grid > div:nth-child(8) {
     text-align: right;
 }
-.table-row {
-    text-align: right;
-}
 
 /* Kolom 9: Actions (Right) */
 .table-header.income-grid > div:nth-child(9) {
     text-align: right;
-}
-
-/* Style dasar untuk SEMUA baris (header & data) */
-.table-header,
-.table-row {
-    /* INI ADALAH PERBAIKAN UTAMA: */
-    display: grid;
-
-    align-items: center; /* Membuat item sejajar di tengah (vertikal) */
-    gap: 15px; /* Jarak antar kolom */
-    padding: 10px 0;
-}
-
-/* Style khusus untuk baris header */
-.table-header {
-    font-weight: 600; /* Tebal */
-    color: #5e3a2f;
-    border-bottom: 2px solid #f2e3d5;
-    padding-bottom: 15px;
-    font-size: 16px; /* Menyamakan font-size header */
-}
-
-/* Style khusus untuk baris data */
-.table-row {
-    color: #5e3a2f;
-    border-bottom: 1px solid #f2e3d5;
-}
-
-/* Hapus garis bawah di baris data terakhir */
-.table-row:last-child {
-    border-bottom: none;
 }
 
 /* Grid baru untuk tabel income (9 kolom) */
@@ -929,29 +899,6 @@ body {
 }
 .btn-action-delete:hover {
     background: #c9302c;
-}
-
-/* ===============================================
-   TAMBAHKAN INI DI BAWAH app.css ANDA
-   Style Khusus Halaman Account
-   =============================================== */
-
-/* Grid baru untuk tabel account (5 kolom) */
-.account-grid {
-    /* # | Name | Username | Password | Actions */
-    grid-template-columns: 50px 1fr 1fr 1fr 130px;
-}
-
-/* Menyesuaikan font di tabel */
-.account-grid .item-name,
-.account-grid .item-username,
-.account-grid .item-password {
-    font-size: 16px;
-}
-
-/* TAMBAHKAN INI UNTUK MEMPERBAIKI PERATAAN PASSWORD */
-.account-grid.table-header > div:nth-child(4) {
-    text-align: justify;
 }
 
 /* ===============================================
