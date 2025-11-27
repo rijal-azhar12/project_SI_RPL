@@ -21,7 +21,7 @@ body {
     width: 100%;
     height: 80px;
     background: white;
-    box-shadow: 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 5px rgba(0, 0, 0, 0.5);
     padding: 0 30px;
     display: flex;
     align-items: center;
@@ -118,8 +118,8 @@ body {
     align-self: flex-end;
 }
 
-.add-menu-btn {
-    width: 250px;
+.add-btn {
+    width: 300px;
     height: 50px;
     background: #c47e45;
     border-radius: 20px;
@@ -132,13 +132,37 @@ body {
     font-weight: 500;
     cursor: pointer;
     border: none;
-    box-shadow: 0px 2px 4px -2px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s;
-    flex-shrink: 0;
+    box-shadow: 5px rgba(0, 0, 0, 0.5);
 }
 
-.add-menu-btn:hover {
+.add-btn:hover {
     background: #b36d35;
+}
+
+.alert {
+    padding: 15px 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    margin-bottom: 25px;
+    box-shadow: 5px rgba(0, 0, 0, 0.5);
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border-top: 1px solid #28a745;
+    border-right: 1px solid #28a745;
+    border-bottom: 1px solid #28a745;
+    border-left: 5px solid #28a745;
+    color: #155724;
+}
+
+.alert-danger {
+    background-color: #edd4d4;
+    border-top: 1px solid #a72828;
+    border-right: 1px solid #a72828;
+    border-bottom: 1px solid #a72828;
+    border-left: 5px solid #a72828;
+    color: #571515;
 }
 
 /* Table */
@@ -148,7 +172,7 @@ body {
     background: white;
     border-radius: 20px;
     overflow: auto;
-    box-shadow: 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 5px rgba(0, 0, 0, 0.5);
     padding: 20px;
 }
 
@@ -290,7 +314,7 @@ body {
     border: 1px solid #888;
     width: 80%;
     max-width: 750px;
-    box-shadow: 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 5px rgba(0, 0, 0, 0.5);
     animation-name: pushdown;
     animation-duration: 0.5s;
     position: absolute;
@@ -494,7 +518,7 @@ body {
         font-size: 16px;
     }
 
-    .add-menu-btn {
+    .add-btn {
         width: 100%;
         margin-bottom: 15px;
         height: 45px;

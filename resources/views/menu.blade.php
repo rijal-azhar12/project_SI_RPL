@@ -6,11 +6,11 @@
     <div class="page-header">
         <div>
             <h1 class="page-title">Manajemen Menu</h1>
-            <p class="page-subtitle">Kelola menu Anda</p>
+            <p class="page-subtitle">Kelola menu anda</p>
         </div>
 
-        <div class="add-menu-btn" id="addMenuBtn">
-            <span class="plus-icon">+</span>
+        <div class="add-btn" id="addMenuBtn">
+            <span>+</span>
             <span>Tambah Menu</span>
         </div>
     </div>
@@ -18,6 +18,12 @@
     @if (session('success'))
     <div class="alert alert-success">
         {{ session('success') }}
+    </div>
+    @endif
+
+    @if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
     </div>
     @endif
 
@@ -73,7 +79,6 @@
         </div>
         <form id="menuForm" method="POST" action="{{ route('menu.store') }}">
             @csrf
-            @method('PUT')
             <input type="hidden" id="formMethod" value="POST">
             <div class="form-group">
                 <label for="gambar_menu_file">Unggah Gambar</label>
@@ -137,116 +142,116 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const addMenuBtn = document.getElementById('addMenuBtn');
-        const menuModal = document.getElementById('menuModal');
-        const closeModal = document.getElementById('closeModal');
-        const cancelBtn = document.getElementById('cancelBtn');
-        const modalTitle = document.getElementById('modalTitle');
-        const menuForm = document.getElementById('menuForm');
-        const formMethod = document.getElementById('formMethod');
+document.addEventListener('DOMContentLoaded', function() {
+    const addMenuBtn = document.getElementById('addMenuBtn');
+    const menuModal = document.getElementById('menuModal');
+    const closeModal = document.getElementById('closeModal');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const modalTitle = document.getElementById('modalTitle');
+    const menuForm = document.getElementById('menuForm');
+    const formMethod = document.getElementById('formMethod');
 
-        const deleteModal = document.getElementById('deleteModal');
-        const closeDeleteModal = document.getElementById('closeDeleteModal');
-        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
-        const deleteForm = document.getElementById('deleteForm');
+    const deleteModal = document.getElementById('deleteModal');
+    const closeDeleteModal = document.getElementById('closeDeleteModal');
+    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+    const deleteForm = document.getElementById('deleteForm');
 
-        const gambarMenuFile = document.getElementById('gambar_menu_file');
-        const gambarMenuBase64 = document.getElementById('gambar_menu_base64');
-        const gambarMenuPreview = document.getElementById('gambar_menu_preview');
+    const gambarMenuFile = document.getElementById('gambar_menu_file');
+    const gambarMenuBase64 = document.getElementById('gambar_menu_base64');
+    const gambarMenuPreview = document.getElementById('gambar_menu_preview');
 
-        function resetImagePreview() {
-            gambarMenuFile.value = '';
-            gambarMenuBase64.value = '';
-            gambarMenuPreview.src = '';
-            gambarMenuPreview.style.display = 'none';
+    function resetImagePreview() {
+        gambarMenuFile.value = '';
+        gambarMenuBase64.value = '';
+        gambarMenuPreview.src = '';
+        gambarMenuPreview.style.display = 'none';
+    }
+
+    gambarMenuFile.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                gambarMenuPreview.src = e.target.result;
+                gambarMenuPreview.style.display = 'block';
+                gambarMenuBase64.value = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            resetImagePreview();
         }
+    });
 
-        gambarMenuFile.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    gambarMenuPreview.src = e.target.result;
-                    gambarMenuPreview.style.display = 'block';
-                    gambarMenuBase64.value = e.target.result;
-                };
-                reader.readAsDataURL(file);
+    addMenuBtn.addEventListener('click', function() {
+        modalTitle.textContent = 'Tambah Menu';
+        menuForm.setAttribute('action', "{{ route('menu.store') }}");
+        formMethod.value = 'PUT';
+        menuForm.reset();
+        resetImagePreview();
+        menuModal.style.display = 'block';
+    });
+
+    document.querySelectorAll('.edit-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const gambar_menu = this.dataset.gambar_menu;
+            const nama_menu = this.dataset.nama_menu;
+            const stok_menu = this.dataset.stok_menu;
+            const deskripsi_menu = this.dataset.deskripsi_menu;
+            const kategori_menu = this.dataset.kategori_menu;
+            const harga_menu = this.dataset.harga_menu;
+
+            modalTitle.textContent = `Edit Menu #${id}`;
+            menuForm.setAttribute('action', `/menu/${id}`);
+            formMethod.value = 'PUT';
+
+            if (gambar_menu) {
+                gambarMenuPreview.src = gambar_menu;
+                gambarMenuPreview.style.display = 'block';
+                gambarMenuBase64.value = gambar_menu;
             } else {
                 resetImagePreview();
             }
-        });
 
-        addMenuBtn.addEventListener('click', function() {
-            modalTitle.textContent = 'Tambah Menu';
-            menuForm.setAttribute('action', "{{ route('menu.store') }}");
-            formMethod.value = 'POST';
-            menuForm.reset();
-            resetImagePreview();
+            document.getElementById('nama_menu').value = nama_menu;
+            document.getElementById('stok_menu').value = stok_menu;
+            document.getElementById('deskripsi_menu').value = deskripsi_menu;
+            document.getElementById('kategori_menu').value = kategori_menu;
+            document.getElementById('harga_menu').value = harga_menu;
+
             menuModal.style.display = 'block';
         });
+    });
 
-        document.querySelectorAll('.edit-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const id = this.dataset.id;
-                const gambar_menu = this.dataset.gambar_menu;
-                const nama_menu = this.dataset.nama_menu;
-                const stok_menu = this.dataset.stok_menu;
-                const deskripsi_menu = this.dataset.deskripsi_menu;
-                const kategori_menu = this.dataset.kategori_menu;
-                const harga_menu = this.dataset.harga_menu;
-
-                modalTitle.textContent = `Edit Menu #${id}`;
-                menuForm.setAttribute('action', `/menu/${id}`);
-                formMethod.value = 'PUT';
-
-                if (gambar_menu) {
-                    gambarMenuPreview.src = gambar_menu;
-                    gambarMenuPreview.style.display = 'block';
-                    gambarMenuBase64.value = gambar_menu;
-                } else {
-                    resetImagePreview();
-                }
-
-                document.getElementById('nama_menu').value = nama_menu;
-                document.getElementById('stok_menu').value = stok_menu;
-                document.getElementById('deskripsi_menu').value = deskripsi_menu;
-                document.getElementById('kategori_menu').value = kategori_menu;
-                document.getElementById('harga_menu').value = harga_menu;
-
-                menuModal.style.display = 'block';
-            });
-        });
-
-        document.querySelectorAll('.delete-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const id = this.dataset.id;
-                deleteForm.setAttribute('action', `/menu/${id}`)
-                deleteModal.style.display = 'block';
-            });
-        });
-
-        closeModal.addEventListener('click', function() {
-            menuModal.style.display = 'none';
-        });
-        cancelBtn.addEventListener('click', function() {
-            menuModal.style.display = 'none';
-        });
-        closeDeleteModal.addEventListener('click', function() {
-            deleteModal.style.display = 'none';
-        });
-        cancelDeleteBtn.addEventListener('click', function() {
-            deleteModal.style.display = 'none';
-        });
-
-        window.addEventListener('click', function(event) {
-            if (event.target == menuModal) {
-                menuModal.style.display = 'none';
-            }
-            if (event.target == deleteModal) {
-                deleteModal.style.display = 'none';
-            }
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.dataset.id;
+            deleteForm.setAttribute('action', `/menu/${id}`)
+            deleteModal.style.display = 'block';
         });
     });
+
+    closeModal.addEventListener('click', function() {
+        menuModal.style.display = 'none';
+    });
+    cancelBtn.addEventListener('click', function() {
+        menuModal.style.display = 'none';
+    });
+    closeDeleteModal.addEventListener('click', function() {
+        deleteModal.style.display = 'none';
+    });
+    cancelDeleteBtn.addEventListener('click', function() {
+        deleteModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', function(event) {
+        if (event.target == menuModal) {
+            menuModal.style.display = 'none';
+        }
+        if (event.target == deleteModal) {
+            deleteModal.style.display = 'none';
+        }
+    });
+});
 </script>
 @endsection
