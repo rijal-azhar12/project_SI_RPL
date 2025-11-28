@@ -25,7 +25,7 @@ class AccountController extends Controller
             'nama' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:user',
             'password' => 'required|string|min:8',
-            'peran' => 'required|string|in:owner,kasir',
+            'peran' => 'required|string|in:Owner,Kasir',
         ]);
 
         Pengguna::create([
@@ -50,7 +50,7 @@ class AccountController extends Controller
         $rules = [
             'nama' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:user,username,' . $account->id_user . ',id_user',
-            'peran' => 'required|string|in:owner,kasir',
+            'peran' => 'required|string|in:Owner,Kasir',
         ];
 
         if ($request->filled('password')) {
