@@ -20,7 +20,7 @@
             <span>Pemasukan</span>
         </a>
 
-        <a href="{{ url('/accounts') }}" class="nav-item ">
+        <a href="{{ url('/account') }}" class="nav-item ">
             <img src="{{ asset('image/icon_akun.png') }}">
             <span>Akun</span>
         </a>
