@@ -79,7 +79,7 @@
         </div>
         <form id="menuForm" method="POST" action="{{ route('menu.store') }}">
             @csrf
-            <input type="hidden" id="formMethod" value="POST">
+            <input type="hidden" name="_method" id="formMethod" value="POST">
             <div class="form-group">
                 <label for="gambar_menu_file">Unggah Gambar</label>
                 <input type="file" id="gambar_menu_file" name="gambar_menu_file" accept="image/*">
@@ -106,8 +106,8 @@
                     <label for="kategori_menu">Kategori *</label>
                     <select id="kategori_menu" name="kategori_menu" required>
                         <option value="">Pilih Kategori</option>
-                        <option value="Food">Makanan</option>
-                        <option value="Drink">Minuman</option>
+                        <option value="Makanan">Makanan</option>
+                        <option value="Minuman">Minuman</option>
                     </select>
                 </div>
                 <div class="form-group">
