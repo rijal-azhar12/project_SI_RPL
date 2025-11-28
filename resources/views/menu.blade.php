@@ -41,7 +41,7 @@
 
         @forelse ($menus as $menu)
         <div class="table-row">
-            <div class="item-number">{{ $user->id_user }}</div>
+            <div class="item-number">{{ $menu->id_menu }}</div>
             <div class="item-image">
                 <img src="{{ $menu->gambar_menu }}">
             </div>
