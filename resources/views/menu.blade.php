@@ -77,15 +77,15 @@
             <h2 class="modal-title" id="modalTitle"></h2>
             <span class="close-btn" id="closeModal">X</span>
         </div>
-        <form id="menuForm" method="POST" action="{{ route('menu.store') }}">
+        <form id="menuForm" method="POST" action="">
             @csrf
-            <input type="hidden" name="_method" id="formMethod" value="POST">
+            <input type="hidden" id="formMethod" value="POST">
             <div class="form-group">
                 <label for="gambar_menu_file">Unggah Gambar</label>
                 <input type="file" id="gambar_menu_file" name="gambar_menu_file" accept="image/*">
                 <input type="hidden" id="gambar_menu_base64" name="gambar_menu">
                 <img id="gambar_menu_preview" src=""
-                    style="max-width: 200px; max-height: 200px; margin-top: 5px; display: none;">
+                    style="max-width: 180px; max-height: 180px; margin-top: 5px; display: none;">
             </div>
             <div class="form-group">
                 <label for="nama_menu">Nama Menu *</label>
@@ -185,7 +185,6 @@
         addMenuBtn.addEventListener('click', function() {
             modalTitle.textContent = 'Tambah Menu';
             menuForm.setAttribute('action', "{{ route('menu.store') }}");
-            formMethod.value = 'PUT';
             menuForm.reset();
             resetImagePreview();
             menuModal.style.display = 'block';
