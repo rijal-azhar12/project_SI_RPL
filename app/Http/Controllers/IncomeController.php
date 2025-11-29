@@ -13,6 +13,9 @@ use Carbon\Carbon;
 
 class IncomeController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index(Request $request)
     {
         $user = Auth::user();
@@ -25,27 +28,23 @@ class IncomeController extends Controller
         } elseif ($filter == 'Week') {
             $startDate = $now->copy()->startOfWeek();
             $endDate = $now->copy()->endOfWeek();
-        } else {
+        } else { // Month
             $startDate = $now->copy()->startOfMonth();
             $endDate = $now->copy()->endOfMonth();
         }
 
-        $baseQuery = Transaksi::query()
-            ->whereBetween('tanggal_transaksi', [$startDate, $endDate])
-            ->with('user', 'details.menu');
-
+        // Query for statistics
+        $statsQuery = Transaksi::whereBetween('tanggal_transaksi', [$startDate, $endDate]);
         if ($user && $user->peran == 'kasir') {
-            $baseQuery->where('id_user', $user->id_user);
+            $statsQuery->where('id_user', $user->id_user);
         }
+        $transaksiForStats = $statsQuery->with('details.menu')->get();
 
-        $transaksiRecords = $baseQuery->get();
-
-        // Initialize statistics
+        // Calculate statistics
         $totalRevenue = 0;
         $totalUnitsSold = 0;
         $topSellingItems = [];
-
-        foreach ($transaksiRecords as $tr) {
+        foreach ($transaksiForStats as $tr) {
             foreach ($tr->details as $detail) {
                 $totalRevenue += $detail->subtotal;
                 $totalUnitsSold += $detail->jumlah_item;
@@ -53,7 +52,6 @@ class IncomeController extends Controller
                 $topSellingItems[$menuName] = ($topSellingItems[$menuName] ?? 0) + $detail->jumlah_item;
             }
         }
-
         arsort($topSellingItems);
         $topSellingItem = null;
         if (!empty($topSellingItems)) {
@@ -61,41 +59,52 @@ class IncomeController extends Controller
             $topSellingItem = (object)['nama_menu' => $topSellingItemName, 'total_terjual' => $topSellingItems[$topSellingItemName]];
         }
 
-        $incomes = Transaksi::with('user', 'details.menu')
-            ->whereBetween('tanggal_transaksi', [$startDate, $endDate]);
-
-        if ($user && $user->peran == 'kasir') {
-            $incomes->where('id_user', $user->id_user);
+        // Query for paginated income table
+        $incomesQuery = Transaksi::with(['user', 'details']);
+         if ($user && $user->peran == 'kasir') {
+            $incomesQuery->where('id_user', $user->id_user);
         }
+        $incomes = $incomesQuery->orderByDesc('tanggal_transaksi')->paginate(10);
 
-        $incomes = $incomes->orderByDesc('tanggal_transaksi')->paginate(10);
 
         return view('income', [
+            // Stats Data
             'totalRevenue' => $totalRevenue,
             'totalUnitsSold' => $totalUnitsSold,
             'topSellingItem' => $topSellingItem,
-            'incomes' => $incomes,
             'filter' => $filter,
             'filterPeriod' => $startDate->format('d M') . ' - ' . $endDate->format('d M Y'),
-            'users' => User::where('peran', 'kasir')->get()
+
+            // Table Data
+            'incomes' => $incomes,
+
+            // Modal Form Data
+            'users' => User::where('peran', 'kasir')->get(),
+            'menusForForm' => Menu::all(),
         ]);
     }
 
+
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
-        $users = User::where('peran', 'kasir')->get();
-        return view('income_create', compact('users'));
+        // Handled by modal in index()
+        return redirect()->route('income.index');
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
         $request->validate([
             'id_user' => 'required|exists:users,id_user',
             'tanggal_transaksi' => 'required|date',
-            'menu_items' => 'array',
+            'menu_items' => 'required|array|min:1',
             'menu_items.*.id_menu' => 'required|exists:menu,id_menu',
             'menu_items.*.jumlah_item' => 'required|integer|min:1',
-            'menu_items.*.harga_item' => 'required|numeric|min:0',
         ]);
 
         $transaksi = Transaksi::create([
@@ -103,47 +112,52 @@ class IncomeController extends Controller
             'tanggal_transaksi' => $request->tanggal_transaksi,
         ]);
 
-        if ($request->has('menu_items')) {
-            foreach ($request->menu_items as $item) {
-                $menu = Menu::find($item['id_menu']);
-                if ($menu) {
-                    TransaksiDetail::create([
-                        'id_transaksi' => $transaksi->id_transaksi,
-                        'id_menu' => $menu->id_menu,
-                        'jumlah_item' => $item['jumlah_item'],
-                        'harga_item' => $item['harga_item'],
-                        'subtotal' => $item['jumlah_item'] * $item['harga_item'],
-                    ]);
-                }
+        foreach ($request->menu_items as $item) {
+            $menu = Menu::find($item['id_menu']);
+            if ($menu) {
+                TransaksiDetail::create([
+                    'id_transaksi' => $transaksi->id_transaksi,
+                    'id_menu' => $menu->id_menu,
+                    'jumlah_item' => $item['jumlah_item'],
+                    'subtotal' => $item['jumlah_item'] * $menu->harga_menu, // Recalculate subtotal server-side
+                ]);
             }
         }
 
         return redirect()->route('income.index')->with('success', 'Transaksi berhasil ditambahkan!');
     }
 
+
+    /**
+     * Display the specified resource.
+     */
     public function show(Transaksi $income)
     {
-        return view('income_show', compact('income'));
+        // Not used, modal is preferred
+        return redirect()->route('income.index');
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     */
     public function edit(Transaksi $income)
     {
-        $users = User::where('peran', 'kasir')->get();
-        $menus = Menu::all();
-        $income->load('details.menu');
-        return view('income_edit', compact('income', 'users', 'menus'));
+        // Handled by modal in index()
+        return redirect()->route('income.index');
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, Transaksi $income)
     {
-        $request->validate([
+         $request->validate([
             'id_user' => 'required|exists:users,id_user',
             'tanggal_transaksi' => 'required|date',
-            'menu_items' => 'array',
-            'menu_items.*.id_detail' => 'nullable|exists:transaksi_detail,id_detail', // For existing details
+            'menu_items' => 'required|array|min:1',
+            'menu_items.*.id_detail' => 'nullable|exists:transaksi_detail,id_detail',
             'menu_items.*.id_menu' => 'required|exists:menu,id_menu',
             'menu_items.*.jumlah_item' => 'required|integer|min:1',
-            'menu_items.*.harga_item' => 'required|numeric|min:0',
         ]);
 
         $income->update([
@@ -154,36 +168,29 @@ class IncomeController extends Controller
         $existingDetailIds = $income->details->pluck('id_detail')->toArray();
         $updatedDetailIds = [];
 
-        if ($request->has('menu_items')) {
-            foreach ($request->menu_items as $item) {
-                if (isset($item['id_detail']) && $item['id_detail']) {
-                    $detail = TransaksiDetail::find($item['id_detail']);
-                    if ($detail && $detail->id_transaksi == $income->id_transaksi) {
-                        $menu = Menu::find($item['id_menu']);
-                        $detail->update([
-                            'id_menu' => $menu->id_menu,
-                            'jumlah_item' => $item['jumlah_item'],
-                            'harga_item' => $item['harga_item'],
-                            'subtotal' => $item['jumlah_item'] * $item['harga_item'],
-                        ]);
-                        $updatedDetailIds[] = $item['id_detail'];
-                    }
-                } else {
-                    $menu = Menu::find($item['id_menu']);
-                    if ($menu) {
-                        $newDetail = TransaksiDetail::create([
-                            'id_transaksi' => $income->id_transaksi,
-                            'id_menu' => $menu->id_menu,
-                            'jumlah_item' => $item['jumlah_item'],
-                            'harga_item' => $item['harga_item'],
-                            'subtotal' => $item['jumlah_item'] * $item['harga_item'],
-                        ]);
-                        $updatedDetailIds[] = $newDetail->id_detail;
-                    }
-                }
+        foreach ($request->menu_items as $item) {
+            $menu = Menu::find($item['id_menu']);
+            if (!$menu) continue;
+
+            $detailData = [
+                'id_transaksi' => $income->id_transaksi,
+                'id_menu' => $menu->id_menu,
+                'jumlah_item' => $item['jumlah_item'],
+                'subtotal' => $item['jumlah_item'] * $menu->harga_menu,
+            ];
+
+            // If id_detail is present and valid, update; otherwise, create.
+            if (!empty($item['id_detail']) && in_array($item['id_detail'], $existingDetailIds)) {
+                $detail = TransaksiDetail::find($item['id_detail']);
+                $detail->update($detailData);
+                $updatedDetailIds[] = (int)$item['id_detail'];
+            } else {
+                $newDetail = TransaksiDetail::create($detailData);
+                $updatedDetailIds[] = $newDetail->id_detail;
             }
         }
 
+        // Delete details that were not in the submission
         $detailsToDelete = array_diff($existingDetailIds, $updatedDetailIds);
         TransaksiDetail::whereIn('id_detail', $detailsToDelete)->delete();
 
@@ -191,15 +198,17 @@ class IncomeController extends Controller
         return redirect()->route('income.index')->with('success', 'Transaksi berhasil diperbarui!');
     }
 
+
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(Transaksi $income)
     {
-        try {
-            $income->details()->delete();
-            $income->delete();
+        // Delete related details first to uphold foreign key constraints
+        $income->details()->delete();
+        // Delete the main transaction
+        $income->delete();
 
-            return response()->json(['message' => 'Transaksi record deleted successfully.']);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Error deleting record.', 'error' => $e->getMessage()], 500);
-        }
+        return redirect()->route('income.index')->with('success', 'Transaksi berhasil dihapus!');
     }
 }
