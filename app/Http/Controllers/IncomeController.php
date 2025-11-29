@@ -28,19 +28,17 @@ class IncomeController extends Controller
         } elseif ($filter == 'Week') {
             $startDate = $now->copy()->startOfWeek();
             $endDate = $now->copy()->endOfWeek();
-        } else { // Month
+        } else {
             $startDate = $now->copy()->startOfMonth();
             $endDate = $now->copy()->endOfMonth();
         }
 
-        // Query for statistics
         $statsQuery = Transaksi::whereBetween('tanggal_transaksi', [$startDate, $endDate]);
         if ($user && $user->peran == 'kasir') {
             $statsQuery->where('id_user', $user->id_user);
         }
         $transaksiForStats = $statsQuery->with('details.menu')->get();
 
-        // Calculate statistics
         $totalRevenue = 0;
         $totalUnitsSold = 0;
         $topSellingItems = [];
@@ -59,26 +57,22 @@ class IncomeController extends Controller
             $topSellingItem = (object)['nama_menu' => $topSellingItemName, 'total_terjual' => $topSellingItems[$topSellingItemName]];
         }
 
-        // Query for paginated income table
         $incomesQuery = Transaksi::with(['user', 'details']);
-         if ($user && $user->peran == 'kasir') {
+        if ($user && $user->peran == 'kasir') {
             $incomesQuery->where('id_user', $user->id_user);
         }
         $incomes = $incomesQuery->orderByDesc('tanggal_transaksi')->paginate(10);
 
 
         return view('income', [
-            // Stats Data
             'totalRevenue' => $totalRevenue,
             'totalUnitsSold' => $totalUnitsSold,
             'topSellingItem' => $topSellingItem,
             'filter' => $filter,
             'filterPeriod' => $startDate->format('d M') . ' - ' . $endDate->format('d M Y'),
 
-            // Table Data
             'incomes' => $incomes,
 
-            // Modal Form Data
             'users' => User::where('peran', 'kasir')->get(),
             'menusForForm' => Menu::all(),
         ]);
@@ -90,7 +84,6 @@ class IncomeController extends Controller
      */
     public function create()
     {
-        // Handled by modal in index()
         return redirect()->route('income.index');
     }
 
@@ -133,7 +126,6 @@ class IncomeController extends Controller
      */
     public function show(Transaksi $income)
     {
-        // Not used, modal is preferred
         return redirect()->route('income.index');
     }
 
@@ -142,7 +134,6 @@ class IncomeController extends Controller
      */
     public function edit(Transaksi $income)
     {
-        // Handled by modal in index()
         return redirect()->route('income.index');
     }
 
@@ -151,7 +142,7 @@ class IncomeController extends Controller
      */
     public function update(Request $request, Transaksi $income)
     {
-         $request->validate([
+        $request->validate([
             'id_user' => 'required|exists:users,id_user',
             'tanggal_transaksi' => 'required|date',
             'menu_items' => 'required|array|min:1',
@@ -179,7 +170,6 @@ class IncomeController extends Controller
                 'subtotal' => $item['jumlah_item'] * $menu->harga_menu,
             ];
 
-            // If id_detail is present and valid, update; otherwise, create.
             if (!empty($item['id_detail']) && in_array($item['id_detail'], $existingDetailIds)) {
                 $detail = TransaksiDetail::find($item['id_detail']);
                 $detail->update($detailData);
@@ -190,7 +180,6 @@ class IncomeController extends Controller
             }
         }
 
-        // Delete details that were not in the submission
         $detailsToDelete = array_diff($existingDetailIds, $updatedDetailIds);
         TransaksiDetail::whereIn('id_detail', $detailsToDelete)->delete();
 
@@ -204,9 +193,7 @@ class IncomeController extends Controller
      */
     public function destroy(Transaksi $income)
     {
-        // Delete related details first to uphold foreign key constraints
         $income->details()->delete();
-        // Delete the main transaction
         $income->delete();
 
         return redirect()->route('income.index')->with('success', 'Transaksi berhasil dihapus!');
