@@ -137,7 +137,6 @@
             accountForm.reset();
             accountModalTitle.textContent = 'Tambah Akun';
             accountForm.setAttribute('action', '{{ route("account.store") }}');
-            formMethod.value = 'POST';
             document.getElementById('accountPassword').required = true;
             accountModal.style.display = 'block';
         });

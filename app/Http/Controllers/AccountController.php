@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pengguna;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -10,7 +10,7 @@ class AccountController extends Controller
 {
     public function index()
     {
-        $users = Pengguna::all();
+        $users = User::all();
         return view('account', ['users' => $users]);
     }
 
@@ -28,7 +28,7 @@ class AccountController extends Controller
             'peran' => 'required|string|in:Owner,Kasir',
         ]);
 
-        Pengguna::create([
+        User::create([
             'nama' => $request->nama,
             'username' => $request->username,
             'password' => Hash::make($request->password),
@@ -38,14 +38,14 @@ class AccountController extends Controller
         return redirect()->route('account.index')->with('success', 'Akun berhasil ditambahkan!');
     }
 
-    public function show(Pengguna $account) {}
+    public function show(User $account) {}
 
-    public function edit(Pengguna $account)
+    public function edit(User $account)
     {
         return view('account_edit', ['user' => $account]);
     }
 
-    public function update(Request $request, Pengguna $account)
+    public function update(Request $request, User $account)
     {
         $rules = [
             'nama' => 'required|string|max:255',
@@ -71,7 +71,7 @@ class AccountController extends Controller
         return redirect()->route('account.index')->with('success', 'Akun berhasil diperbarui!');
     }
 
-    public function destroy(Pengguna $account)
+    public function destroy(User $account)
     {
         $account->delete();
         return redirect()->route('account.index')->with('success', 'Akun berhasil dihapus!');
