@@ -45,15 +45,15 @@
 
         @forelse ($menus as $menu)
         <div class="table-row">
-            <div class="item-number">{{ $menu->id_menu }}</div>
-            <div class="item-image">
+            <div class="item-idmenu">{{ $menu->id_menu }}</div>
+            <div class="item-imagemenu">
                 <img src="{{ $menu->gambar_menu }}">
             </div>
-            <div class="item-name">{{ $menu->nama_menu }}</div>
-            <div class="item-units">{{ $menu->stok_menu }}</div>
-            <div class="item-description">{{ $menu->deskripsi_menu }}</div>
-            <div class="item-category">{{ $menu->kategori_menu }}</div>
-            <div class="item-price">Rp{{ number_format($menu->harga_menu, 0, ',', '.') }}</div>
+            <div class="item-namemenu">{{ $menu->nama_menu }}</div>
+            <div class="item-unitmenu">{{ $menu->stok_menu }}</div>
+            <div class="item-descriptionmenu">{{ $menu->deskripsi_menu }}</div>
+            <div class="item-categorymenu">{{ $menu->kategori_menu }}</div>
+            <div class="item-pricemenu">Rp{{ number_format($menu->harga_menu, 0, ',', '.') }}</div>
             <div class="item-actions">
                 <div class="action-btn edit-btn" data-id="{{ $menu->id_menu }}"
                     data-gambar_menu="{{ $menu->gambar_menu }}" data-nama_menu="{{ $menu->nama_menu }}"
@@ -146,117 +146,117 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const addMenuBtn = document.getElementById('addMenuBtn');
-    const menuModal = document.getElementById('menuModal');
-    const closeModal = document.getElementById('closeModal');
-    const cancelBtn = document.getElementById('cancelBtn');
-    const modalTitle = document.getElementById('modalTitle');
-    const menuForm = document.getElementById('menuForm');
-    const formMethod = document.getElementById('formMethod');
+    document.addEventListener('DOMContentLoaded', function() {
+        const addMenuBtn = document.getElementById('addMenuBtn');
+        const menuModal = document.getElementById('menuModal');
+        const closeModal = document.getElementById('closeModal');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const modalTitle = document.getElementById('modalTitle');
+        const menuForm = document.getElementById('menuForm');
+        const formMethod = document.getElementById('formMethod');
 
-    const deleteModal = document.getElementById('deleteModal');
-    const closeDeleteModal = document.getElementById('closeDeleteModal');
-    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
-    const deleteForm = document.getElementById('deleteForm');
+        const deleteModal = document.getElementById('deleteModal');
+        const closeDeleteModal = document.getElementById('closeDeleteModal');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        const deleteForm = document.getElementById('deleteForm');
 
-    const gambarMenuFile = document.getElementById('gambar_menu_file');
-    const gambarMenuBase64 = document.getElementById('gambar_menu_base64');
-    const gambarMenuPreview = document.getElementById('gambar_menu_preview');
+        const gambarMenuFile = document.getElementById('gambar_menu_file');
+        const gambarMenuBase64 = document.getElementById('gambar_menu_base64');
+        const gambarMenuPreview = document.getElementById('gambar_menu_preview');
 
-    function resetImagePreview() {
-        gambarMenuFile.value = '';
-        gambarMenuBase64.value = '';
-        gambarMenuPreview.src = '';
-        gambarMenuPreview.style.display = 'none';
-    }
-
-    gambarMenuFile.addEventListener('change', function() {
-        const file = this.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                gambarMenuPreview.src = e.target.result;
-                gambarMenuPreview.style.display = 'block';
-                gambarMenuBase64.value = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        } else {
-            resetImagePreview();
+        function resetImagePreview() {
+            gambarMenuFile.value = '';
+            gambarMenuBase64.value = '';
+            gambarMenuPreview.src = '';
+            gambarMenuPreview.style.display = 'none';
         }
-    });
 
-    addMenuBtn.addEventListener('click', function() {
-        modalTitle.textContent = 'Tambah Menu';
-        menuForm.setAttribute('action', "{{ route('menu.store') }}");
-        menuForm.reset();
-        resetImagePreview();
-        menuModal.style.display = 'block';
-    });
-
-    document.querySelectorAll('.edit-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const id = this.dataset.id;
-            const gambar_menu = this.dataset.gambar_menu;
-            const nama_menu = this.dataset.nama_menu;
-            const stok_menu = this.dataset.stok_menu;
-            const deskripsi_menu = this.dataset.deskripsi_menu;
-            const kategori_menu = this.dataset.kategori_menu;
-            const harga_menu = this.dataset.harga_menu;
-
-            modalTitle.textContent = `Edit Menu #${id}`;
-            menuForm.setAttribute('action', `/menu/${id}`);
-            formMethod.value = 'PUT';
-
-            if (gambar_menu) {
-                gambarMenuPreview.src = gambar_menu;
-                gambarMenuPreview.style.display = 'block';
-                gambarMenuBase64.value = gambar_menu;
+        gambarMenuFile.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    gambarMenuPreview.src = e.target.result;
+                    gambarMenuPreview.style.display = 'block';
+                    gambarMenuBase64.value = e.target.result;
+                };
+                reader.readAsDataURL(file);
             } else {
                 resetImagePreview();
             }
+        });
 
-            document.getElementById('nama_menu').value = nama_menu;
-            document.getElementById('stok_menu').value = stok_menu;
-            document.getElementById('deskripsi_menu').value = deskripsi_menu;
-            document.getElementById('kategori_menu').value = kategori_menu;
-            document.getElementById('harga_menu').value = harga_menu;
-
+        addMenuBtn.addEventListener('click', function() {
+            modalTitle.textContent = 'Tambah Menu';
+            menuForm.setAttribute('action', "{{ route('menu.store') }}");
+            menuForm.reset();
+            resetImagePreview();
             menuModal.style.display = 'block';
         });
-    });
 
-    document.querySelectorAll('.delete-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const id = this.dataset.id;
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.dataset.id;
+                const gambar_menu = this.dataset.gambar_menu;
+                const nama_menu = this.dataset.nama_menu;
+                const stok_menu = this.dataset.stok_menu;
+                const deskripsi_menu = this.dataset.deskripsi_menu;
+                const kategori_menu = this.dataset.kategori_menu;
+                const harga_menu = this.dataset.harga_menu;
 
-            modalDeleteTitle.textContent = `Hapus Menu #${id}`;
-            deleteForm.setAttribute('action', `/menu/${id}`)
-            deleteModal.style.display = 'block';
+                modalTitle.textContent = `Edit Menu #${id}`;
+                menuForm.setAttribute('action', `/menu/${id}`);
+                formMethod.value = 'PUT';
+
+                if (gambar_menu) {
+                    gambarMenuPreview.src = gambar_menu;
+                    gambarMenuPreview.style.display = 'block';
+                    gambarMenuBase64.value = gambar_menu;
+                } else {
+                    resetImagePreview();
+                }
+
+                document.getElementById('nama_menu').value = nama_menu;
+                document.getElementById('stok_menu').value = stok_menu;
+                document.getElementById('deskripsi_menu').value = deskripsi_menu;
+                document.getElementById('kategori_menu').value = kategori_menu;
+                document.getElementById('harga_menu').value = harga_menu;
+
+                menuModal.style.display = 'block';
+            });
+        });
+
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.dataset.id;
+
+                modalDeleteTitle.textContent = `Hapus Menu #${id}`;
+                deleteForm.setAttribute('action', `/menu/${id}`)
+                deleteModal.style.display = 'block';
+            });
+        });
+
+        closeModal.addEventListener('click', function() {
+            menuModal.style.display = 'none';
+        });
+        cancelBtn.addEventListener('click', function() {
+            menuModal.style.display = 'none';
+        });
+        closeDeleteModal.addEventListener('click', function() {
+            deleteModal.style.display = 'none';
+        });
+        cancelDeleteBtn.addEventListener('click', function() {
+            deleteModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target == menuModal) {
+                menuModal.style.display = 'none';
+            }
+            if (event.target == deleteModal) {
+                deleteModal.style.display = 'none';
+            }
         });
     });
-
-    closeModal.addEventListener('click', function() {
-        menuModal.style.display = 'none';
-    });
-    cancelBtn.addEventListener('click', function() {
-        menuModal.style.display = 'none';
-    });
-    closeDeleteModal.addEventListener('click', function() {
-        deleteModal.style.display = 'none';
-    });
-    cancelDeleteBtn.addEventListener('click', function() {
-        deleteModal.style.display = 'none';
-    });
-
-    window.addEventListener('click', function(event) {
-        if (event.target == menuModal) {
-            menuModal.style.display = 'none';
-        }
-        if (event.target == deleteModal) {
-            deleteModal.style.display = 'none';
-        }
-    });
-});
 </script>
 @endsection
