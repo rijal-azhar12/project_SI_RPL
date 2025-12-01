@@ -57,7 +57,7 @@ class IncomeController extends Controller
             $topSellingItem = (object)['nama_menu' => $topSellingItemName, 'total_terjual' => $topSellingItems[$topSellingItemName]];
         }
 
-        $incomesQuery = Transaksi::with(['user', 'details']);
+        $incomesQuery = Transaksi::with(['user', 'details.menu']);
         if ($user && $user->peran == 'kasir') {
             $incomesQuery->where('id_user', $user->id_user);
         }
