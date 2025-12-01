@@ -41,7 +41,7 @@
         </div>
 
         @forelse ($users as $user)
-        <div class="table-row">
+        <div class="table-row account">
             <div class="item-iduser">{{ $user->id_user }}</div>
             <div class="item-nameuser">{{ $user->nama }}</div>
             <div class="item-usernameuser">{{ $user->username }}</div>
@@ -122,76 +122,76 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const accountModal = document.getElementById('accountModal');
-        const deleteAccountModal = document.getElementById('deleteAccountModal');
-        const accountForm = document.getElementById('accountForm');
-        const deleteForm = document.getElementById('deleteForm');
-        const accountModalTitle = document.getElementById('accountModalTitle');
-        const deleteModalTitle = document.getElementById('deleteModalTitle');
-        const formMethod = document.getElementById('formMethod');
+document.addEventListener('DOMContentLoaded', function() {
+    const accountModal = document.getElementById('accountModal');
+    const deleteAccountModal = document.getElementById('deleteAccountModal');
+    const accountForm = document.getElementById('accountForm');
+    const deleteForm = document.getElementById('deleteForm');
+    const accountModalTitle = document.getElementById('accountModalTitle');
+    const deleteModalTitle = document.getElementById('deleteModalTitle');
+    const formMethod = document.getElementById('formMethod');
 
-        const addAccountBtn = document.getElementById('addAccountBtn');
-        const closeAccountModal = document.getElementById('closeAccountModal');
-        const cancelAccountBtn = document.getElementById('cancelAccountBtn');
-        const closeDeleteAccountModal = document.getElementById('closeDeleteAccountModal');
-        const cancelDeleteAccountBtn = document.getElementById('cancelDeleteAccountBtn');
+    const addAccountBtn = document.getElementById('addAccountBtn');
+    const closeAccountModal = document.getElementById('closeAccountModal');
+    const cancelAccountBtn = document.getElementById('cancelAccountBtn');
+    const closeDeleteAccountModal = document.getElementById('closeDeleteAccountModal');
+    const cancelDeleteAccountBtn = document.getElementById('cancelDeleteAccountBtn');
 
-        addAccountBtn.addEventListener('click', () => {
-            accountForm.reset();
-            accountModalTitle.textContent = 'Tambah Akun';
-            accountForm.setAttribute('action', '{{ route("account.store") }}');
-            document.getElementById('accountPassword').required = true;
+    addAccountBtn.addEventListener('click', () => {
+        accountForm.reset();
+        accountModalTitle.textContent = 'Tambah Akun';
+        accountForm.setAttribute('action', '{{ route("account.store") }}');
+        document.getElementById('accountPassword').required = true;
+        accountModal.style.display = 'block';
+    });
+
+    document.querySelectorAll('.edit-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const nama = this.dataset.nama;
+            const username = this.dataset.username;
+            const peran = this.dataset.peran;
+
+            accountModalTitle.textContent = `Edit Akun #${id}`;
+            accountForm.setAttribute('action', `/account/${id}`);
+            formMethod.value = 'PUT';
+
+            document.getElementById('accountName').value = nama;
+            document.getElementById('accountUsername').value = username;
+            document.getElementById('accountRole').value = peran;
+            document.getElementById('accountPassword').required = false;
+
             accountModal.style.display = 'block';
         });
+    });
 
-        document.querySelectorAll('.edit-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const id = this.dataset.id;
-                const nama = this.dataset.nama;
-                const username = this.dataset.username;
-                const peran = this.dataset.peran;
-
-                accountModalTitle.textContent = `Edit Akun #${id}`;
-                accountForm.setAttribute('action', `/account/${id}`);
-                formMethod.value = 'PUT';
-
-                document.getElementById('accountName').value = nama;
-                document.getElementById('accountUsername').value = username;
-                document.getElementById('accountRole').value = peran;
-                document.getElementById('accountPassword').required = false;
-
-                accountModal.style.display = 'block';
-            });
-        });
-
-        document.querySelectorAll('.delete-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const id = this.dataset.id;
-                deleteModalTitle.textContent = `Hapus Akun #${id}`;
-                deleteForm.setAttribute('action', `/account/${id}`);
-                deleteAccountModal.style.display = 'block';
-            });
-        });
-
-        function closeModal() {
-            accountModal.style.display = 'none';
-            deleteAccountModal.style.display = 'none';
-        }
-
-        closeAccountModal.addEventListener('click', closeModal);
-        cancelAccountBtn.addEventListener('click', closeModal);
-        closeDeleteAccountModal.addEventListener('click', closeModal);
-        cancelDeleteAccountBtn.addEventListener('click', closeModal);
-
-        window.addEventListener('click', function(event) {
-            if (event.target == accountModal) {
-                closeModal();
-            }
-            if (event.target == deleteAccountModal) {
-                closeModal();
-            }
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.dataset.id;
+            deleteModalTitle.textContent = `Hapus Akun #${id}`;
+            deleteForm.setAttribute('action', `/account/${id}`);
+            deleteAccountModal.style.display = 'block';
         });
     });
+
+    function closeModal() {
+        accountModal.style.display = 'none';
+        deleteAccountModal.style.display = 'none';
+    }
+
+    closeAccountModal.addEventListener('click', closeModal);
+    cancelAccountBtn.addEventListener('click', closeModal);
+    closeDeleteAccountModal.addEventListener('click', closeModal);
+    cancelDeleteAccountBtn.addEventListener('click', closeModal);
+
+    window.addEventListener('click', function(event) {
+        if (event.target == accountModal) {
+            closeModal();
+        }
+        if (event.target == deleteAccountModal) {
+            closeModal();
+        }
+    });
+});
 </script>
 @endsection

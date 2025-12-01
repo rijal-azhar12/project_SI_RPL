@@ -439,10 +439,10 @@ body {
     grid-template-columns: 50px 1fr 1fr 1fr 150px;
 }
 
-.item-iduser,
-.item-nameuser,
-.item-usernameuser,
-.item-roleuser {
+.account .item-iduser,
+.account .item-nameuser,
+.account .item-usernameuser,
+.account .item-roleuser {
     font-size: 16px;
 }
 
