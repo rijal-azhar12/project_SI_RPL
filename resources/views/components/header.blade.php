@@ -10,7 +10,7 @@
             <span>Menu</span>
         </a>
 
-        <a href="{{ url('/pengeluaran') }}" class="nav-item ">
+        <a href="{{ url('/expense') }}" class="nav-item ">
             <img src="{{ asset('image/icon_pengeluaran.png') }}">
             <span>Pengeluaran</span>
         </a>

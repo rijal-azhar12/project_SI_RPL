@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Pengeluaran; // Mengimpor model Pengeluaran
+use App\Models\Expense; // Mengimpor model Pengeluaran
 
-class PengeluaranController extends Controller
+class ExpenseController extends Controller
 {
     /**
      * Menampilkan daftar pengeluaran.
@@ -15,7 +15,7 @@ class PengeluaranController extends Controller
     public function index()
     {
         // Mengambil semua data dari tabel pengeluaran
-        $data_pengeluaran = Pengeluaran::all();
+        $data_pengeluaran = Expense::all();
 
         // Mengirim data ke view 'expense' dan menampilkannya
         return view('pengeluaran', ['data_pengeluaran' => $data_pengeluaran]);
@@ -35,7 +35,7 @@ class PengeluaranController extends Controller
             'tanggal_pengeluaran' => 'required|date',
         ]);
 
-        $pengeluaran = new Pengeluaran;
+        $pengeluaran = new Expense;
         $pengeluaran->keterangan = $request->keterangan;
         $pengeluaran->jumlah_pengeluaran = $request->jumlah_pengeluaran;
         $pengeluaran->tanggal_pengeluaran = $request->tanggal_pengeluaran;
@@ -50,7 +50,7 @@ class PengeluaranController extends Controller
      * @param  \App\Models\Pengeluaran  $pengeluaran
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Pengeluaran $pengeluaran)
+    public function show(Expense $pengeluaran)
     {
         return response()->json($pengeluaran);
     }
@@ -62,7 +62,7 @@ class PengeluaranController extends Controller
      * @param  \App\Models\Pengeluaran  $pengeluaran
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Pengeluaran $pengeluaran)
+    public function update(Request $request, Expense $pengeluaran)
     {
         $request->validate([
             'keterangan' => 'required|string|max:255',
@@ -84,7 +84,7 @@ class PengeluaranController extends Controller
      * @param  \App\Models\Pengeluaran  $pengeluaran
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Pengeluaran $pengeluaran)
+    public function destroy(Expense $pengeluaran)
     {
         $pengeluaran->delete();
         return response()->json(['success' => true, 'message' => 'Data pengeluaran berhasil dihapus.']);
