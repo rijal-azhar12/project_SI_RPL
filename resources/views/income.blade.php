@@ -86,8 +86,13 @@
             <div class="item-idcashier">{{ $transaksi->user->id_user }} - {{ $transaksi->user->nama ?? 'N/A' }}</div>
             <div class="item-datetransaction">{{ $transaksi->tanggal_transaksi }}</div>
             <div class="item-namemenu">{{ $transaksi->details->first()->menu->nama_menu ?? 'N/A' }}</div>
+            <div class="item-categorymenu">{{ $transaksi->details->first()->menu->kategori_menu ?? 'N/A' }}</div>
             <div class="item-itemtransaction">{{ $transaksi->details->sum('jumlah_item') }}</div>
-            <div class="item-pricetransaction">Rp{{ number_format($transaksi->details->sum('subtotal'), 0, ',', '.') }}
+            <div class="item-pricemenu">
+                Rp{{ number_format($transaksi->details->sum('subtotal'), 0, ',', '.') }}
+            </div>
+            <div class="item-pricetransaction">
+                Rp{{ number_format($transaksi->details->sum(function ($d) {return $d->subtotal * $d->jumlah_item;}), 0, ',', '.') }}
             </div>
             <div class="item-actions">
                 <div class="action-btn edit-btn" data-id="{{ $transaksi->id_transaksi }}"
@@ -144,7 +149,8 @@
                 {{-- Baris item akan ditambahkan oleh JS --}}
             </div>
 
-            <button type="button" class="btn btn-secondary" id="addMenuItemBtn" style="margin-bottom: 20px;">+ Tambah
+            <button type="button" class="btn btn-secondary" id="addMenuItemBtn" style="margin-bottom: 20px;">+
+                Tambah
                 Item</button>
 
             <div class="form-actions">
@@ -278,7 +284,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Ambil harga dari menu saat ini, bukan dari detail lama
                 const selectedMenu = newRow.querySelector('.menu_item_id_menu').options[newRow
                     .querySelector('.menu_item_id_menu').selectedIndex];
-                newRow.querySelector('.menu_item_harga').value = selectedMenu.dataset.harga || detail
+                newRow.querySelector('.menu_item_harga').value = selectedMenu.dataset.harga ||
+                    detail
                     .subtotal / detail.jumlah_item;
             });
         }
