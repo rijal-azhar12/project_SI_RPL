@@ -41,11 +41,11 @@
         </div>
 
         @forelse ($users as $user)
-        <div class="table-row account">
-            <div class="item-number">{{ $user->id_user }}</div>
-            <div class="item-name">{{ $user->nama }}</div>
-            <div class="item-username">{{ $user->username }}</div>
-            <div class="item-peran">{{ $user->peran }}</div>
+        <div class="table-row">
+            <div class="item-iduser">{{ $user->id_user }}</div>
+            <div class="item-nameuser">{{ $user->nama }}</div>
+            <div class="item-usernameuser">{{ $user->username }}</div>
+            <div class="item-roleuser">{{ $user->peran }}</div>
             <div class="item-actions">
                 <button class="action-btn edit-btn" data-id="{{ $user->id_user }}" data-nama="{{ $user->nama }}"
                     data-username="{{ $user->username }}" data-peran="{{ $user->peran }}">
