@@ -17,7 +17,7 @@ class OwnerMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->peran === 'owner') {
+        if (Auth::check() && Auth::user()->peran === 'Owner') {
             return $next($request);
         }
 

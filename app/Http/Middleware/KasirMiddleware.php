@@ -17,7 +17,7 @@ class KasirMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->peran === 'kasir') {
+        if (Auth::check() && Auth::user()->peran === 'Kasir') {
             return $next($request);
         }
 

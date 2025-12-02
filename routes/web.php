@@ -22,13 +22,13 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::middleware(['auth', 'kasir'])->group(function () {
+Route::middleware(['auth', 'Kasir'])->group(function () {
     Route::get('/cashier', function () {
         return view('cashier');
     })->name('cashier');
 });
 
-Route::middleware(['auth', 'owner'])->group(function () {
+Route::middleware(['auth', 'Owner'])->group(function () {
     Route::resource('expense', ExpenseController::class);
     Route::resource('menu', MenuController::class);
     Route::resource('income', IncomeController::class);
