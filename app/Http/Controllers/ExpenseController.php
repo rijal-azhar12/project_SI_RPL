@@ -2,91 +2,61 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Expense;
 use Illuminate\Http\Request;
-use App\Models\Expense; // Mengimpor model Pengeluaran
 
 class ExpenseController extends Controller
 {
-    /**
-     * Menampilkan daftar pengeluaran.
-     *
-     * @return \Illuminate\View\View
-     */
     public function index()
     {
-        // Mengambil semua data dari tabel pengeluaran
-        $data_pengeluaran = Expense::all();
-
-        // Mengirim data ke view 'expense' dan menampilkannya
-        return view('pengeluaran', ['data_pengeluaran' => $data_pengeluaran]);
+        $expenses = Expense::all();
+        return view('expense', compact('expenses'));
     }
 
-    /**
-     * Menyimpan data pengeluaran baru ke database.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
-     */
+    public function create()
+    {
+        return view('expense_create');
+    }
+
     public function store(Request $request)
     {
         $request->validate([
             'keterangan' => 'required|string|max:255',
-            'jumlah_pengeluaran' => 'required|numeric',
+            'jumlah_pengeluaran' => 'required|numeric|min:0',
             'tanggal_pengeluaran' => 'required|date',
         ]);
 
-        $pengeluaran = new Expense;
-        $pengeluaran->keterangan = $request->keterangan;
-        $pengeluaran->jumlah_pengeluaran = $request->jumlah_pengeluaran;
-        $pengeluaran->tanggal_pengeluaran = $request->tanggal_pengeluaran;
-        $pengeluaran->save();
+        Expense::create($request->all());
 
-        return response()->json(['success' => true, 'message' => 'Data pengeluaran berhasil ditambahkan.']);
+        return redirect()->route('expense.index')->with('success', 'Pengeluaran berhasil ditambahkan!');
     }
 
-    /**
-     * Menampilkan data pengeluaran spesifik.
-     *
-     * @param  \App\Models\Pengeluaran  $pengeluaran
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function show(Expense $pengeluaran)
+    public function show(Expense $expense)
     {
-        return response()->json($pengeluaran);
+        // Not implemented
     }
 
-    /**
-     * Memperbarui data pengeluaran di database.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Pengeluaran  $pengeluaran
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function update(Request $request, Expense $pengeluaran)
+    public function edit(Expense $expense)
+    {
+        return view('expense_edit', compact('expense'));
+    }
+
+    public function update(Request $request, Expense $expense)
     {
         $request->validate([
             'keterangan' => 'required|string|max:255',
-            'jumlah_pengeluaran' => 'required|numeric',
+            'jumlah_pengeluaran' => 'required|numeric|min:0',
             'tanggal_pengeluaran' => 'required|date',
         ]);
 
-        $pengeluaran->keterangan = $request->keterangan;
-        $pengeluaran->jumlah_pengeluaran = $request->jumlah_pengeluaran;
-        $pengeluaran->tanggal_pengeluaran = $request->tanggal_pengeluaran;
-        $pengeluaran->save();
+        $expense->update($request->all());
 
-        return response()->json(['success' => true, 'message' => 'Data pengeluaran berhasil diperbarui.']);
+        return redirect()->route('expense.index')->with('success', 'Pengeluaran berhasil diperbarui!');
     }
 
-    /**
-     * Menghapus data pengeluaran dari database.
-     *
-     * @param  \App\Models\Pengeluaran  $pengeluaran
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function destroy(Expense $pengeluaran)
+    public function destroy(Expense $expense)
     {
-        $pengeluaran->delete();
-        return response()->json(['success' => true, 'message' => 'Data pengeluaran berhasil dihapus.']);
+        $expense->delete();
+        return redirect()->route('expense.index')->with('success', 'Pengeluaran berhasil dihapus!');
     }
 }

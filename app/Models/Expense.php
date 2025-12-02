@@ -17,6 +17,17 @@ class Expense extends Model
     protected $table = 'pengeluaran';
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'keterangan',
+        'jumlah_pengeluaran',
+        'tanggal_pengeluaran',
+    ];
+
+    /**
      * The primary key associated with the table.
      *
      * @var string
