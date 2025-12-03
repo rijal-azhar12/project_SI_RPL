@@ -6,12 +6,12 @@
     <div class="page-header">
         <div>
             <h1 class="page-title">Manajemen Menu</h1>
-            <p class="page-subtitle">Kelola item menu Anda</p>
+            <p class="page-subtitle">Kelola menu anda</p>
         </div>
 
-        <div class="add-menu-btn" id="addMenuBtn">
-            <span class="plus-icon">+</span>
-            <span>Tambah Item Menu</span>
+        <div class="add-btn" id="addMenuBtn">
+            <span>+</span>
+            <span>Tambah Menu</span>
         </div>
     </div>
 
@@ -21,7 +21,17 @@
     </div>
     @endif
 
-    <div class="menu-table">
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
+    <div class="table">
         <div class="table-header">
             <div>#</div>
             <div>Gambar</div>
@@ -30,68 +40,56 @@
             <div>Deskripsi</div>
             <div>Kategori</div>
             <div>Harga</div>
-            <div style="text-align: right;">Aksi</div>
+            <div>Aksi</div>
         </div>
 
         @forelse ($menus as $menu)
         <div class="table-row">
-            <div class="item-number">{{ $loop->iteration }}</div>
-            <div class="item-image">
-                <img src="{{ $menu->gambar_menu }}" alt="{{ $menu->nama_menu }}"
-                    style="width: 100px; height: 100px; object-fit: cover;">
+            <div class="item-idmenu">{{ $menu->id_menu }}</div>
+            <div class="item-imagemenu">
+                <img src="{{ $menu->gambar_menu }}">
             </div>
-            <div class="item-name">{{ $menu->nama_menu }}</div>
-            <div class="item-units">{{ $menu->stok_menu }}</div>
-            <div class="item-description">{{ $menu->deskripsi_menu }}</div>
-            <div class="item-category">{{ $menu->kategori_menu }}</div>
-            <div class="item-price">Rp{{ number_format($menu->harga_menu, 0, ',', '.') }}</div>
+            <div class="item-namemenu">{{ $menu->nama_menu }}</div>
+            <div class="item-unitmenu">{{ $menu->stok_menu }}</div>
+            <div class="item-descriptionmenu">{{ $menu->deskripsi_menu }}</div>
+            <div class="item-categorymenu">{{ $menu->kategori_menu }}</div>
+            <div class="item-pricemenu">Rp{{ number_format($menu->harga_menu, 0, ',', '.') }}</div>
             <div class="item-actions">
                 <div class="action-btn edit-btn" data-id="{{ $menu->id_menu }}"
                     data-gambar_menu="{{ $menu->gambar_menu }}" data-nama_menu="{{ $menu->nama_menu }}"
                     data-stok_menu="{{ $menu->stok_menu }}" data-deskripsi_menu="{{ $menu->deskripsi_menu }}"
                     data-kategori_menu="{{ $menu->kategori_menu }}" data-harga_menu="{{ $menu->harga_menu }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="#C47E45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 20h9"></path>
-                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-                    </svg>
+                    <img src="{{ asset('image/icon_edit.png') }}" alt="Edit">
                 </div>
                 <div class="action-btn delete-btn" data-id="{{ $menu->id_menu }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="#D9534F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="3 6 5 6 21 6"></polyline>
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                        <line x1="10" y1="11" x2="10" y2="17"></line>
-                        <line x1="14" y1="11" x2="14" y2="17"></line>
-                    </svg>
+                    <img src="{{ asset('image/icon_delete.png') }}" alt="Delete">
                 </div>
             </div>
         </div>
         @empty
         <div class="table-row">
-            <div class="item-number" style="grid-column: 1 / -1; text-align: center;">Tidak ada item menu ditemukan.
+            <div class="item-number" style="grid-column: 1 / -1; text-align: center;">Tidak ada menu ditemukan.
             </div>
         </div>
         @endforelse
     </div>
 </div>
 
-{{-- Add/Edit Menu Modal --}}
 <div class="modal" id="menuModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h2 class="modal-title" id="modalTitle">Tambah Item Menu</h2>
-            <span class="close-btn" id="closeModal">&times;</span>
+            <h2 class="modal-title" id="modalTitle"></h2>
+            <span class="close-btn" id="closeModal">X</span>
         </div>
-        <form id="menuForm" method="POST" action="{{ route('menu.store') }}">
+        <form id="menuForm" method="POST" action="">
             @csrf
             <input type="hidden" name="_method" id="formMethod" value="POST">
             <div class="form-group">
                 <label for="gambar_menu_file">Unggah Gambar</label>
                 <input type="file" id="gambar_menu_file" name="gambar_menu_file" accept="image/*">
                 <input type="hidden" id="gambar_menu_base64" name="gambar_menu">
-                <img id="gambar_menu_preview" src="" alt="Pratinjau Gambar"
-                    style="max-width: 100px; max-height: 100px; margin-top: 10px; display: none;">
+                <img id="gambar_menu_preview" src=""
+                    style="max-width: 180px; max-height: 180px; margin-top: 5px; display: none;">
             </div>
             <div class="form-group">
                 <label for="nama_menu">Nama Menu *</label>
@@ -104,7 +102,7 @@
                 </div>
                 <div class="form-group">
                     <label for="deskripsi_menu">Deskripsi</label>
-                    <textarea id="deskripsi_menu" name="deskripsi_menu" style="resize: none;"></textarea>
+                    <textarea id="deskripsi_menu" name="deskripsi_menu"></textarea>
                 </div>
             </div>
             <div class="form-row">
@@ -112,8 +110,8 @@
                     <label for="kategori_menu">Kategori *</label>
                     <select id="kategori_menu" name="kategori_menu" required>
                         <option value="">Pilih Kategori</option>
-                        <option value="Drink">Minuman</option>
-                        <option value="Food">Makanan</option>
+                        <option value="Makanan">Makanan</option>
+                        <option value="Minuman">Minuman</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -129,14 +127,13 @@
     </div>
 </div>
 
-{{-- Delete Confirmation Modal --}}
 <div class="modal confirmation-modal" id="deleteModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h2 class="modal-title">Hapus Item Menu</h2>
-            <span class="close-btn" id="closeDeleteModal">&times;</span>
+            <h2 class="modal-title" id="modalDeleteTitle"></h2>
+            <span class="close-btn" id="closeDeleteModal">X</span>
         </div>
-        <p class="confirmation-text">Apakah Anda yakin ingin menghapus item menu ini?</p>
+        <p class="confirmation-text">Apakah anda yakin ingin menghapus menu ini?</p>
         <div class="form-actions">
             <button type="button" class="btn btn-secondary" id="cancelDeleteBtn">Batal</button>
             <form id="deleteForm" method="POST" action="">
@@ -148,195 +145,118 @@
     </div>
 </div>
 
-<style>
-.modal {
-    display: none;
-    /* Hidden by default */
-    position: fixed;
-    /* Stay in place */
-    z-index: 1;
-    /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%;
-    /* Full width */
-    height: 100%;
-    /* Full height */
-    overflow: auto;
-    /* Enable scroll if needed */
-    background-color: rgba(0, 0, 0, 0.4);
-    /* Black w/ opacity */
-}
-
-.modal-content {
-    background-color: #fefefe;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    /* Could be adjusted */
-    max-width: 500px;
-    /* Max width for better appearance */
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    animation-name: animatetop;
-    animation-duration: 0.4s;
-    position: relative;
-    /* Needed for top/left/transform */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    margin: 0;
-    /* Reset margin to allow transform to center */
-}
-
-/* Add animation */
-@-webkit-keyframes animatetop {
-    from {
-        top: -300px;
-        opacity: 0
-    }
-
-    to {
-        top: 50%;
-        opacity: 1
-    }
-
-    /* Adjust 'to' top to match final position */
-}
-
-@keyframes animatetop {
-    from {
-        top: -300px;
-        opacity: 0
-    }
-
-    to {
-        top: 50%;
-        opacity: 1
-    }
-
-    /* Adjust 'to' top to match final position */
-}
-</style>
-
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const addMenuBtn = document.getElementById('addMenuBtn');
-    const menuModal = document.getElementById('menuModal');
-    const closeModal = document.getElementById('closeModal');
-    const cancelBtn = document.getElementById('cancelBtn');
-    const modalTitle = document.getElementById('modalTitle');
-    const menuForm = document.getElementById('menuForm');
-    const formMethod = document.getElementById('formMethod');
+    document.addEventListener('DOMContentLoaded', function() {
+        const addMenuBtn = document.getElementById('addMenuBtn');
+        const menuModal = document.getElementById('menuModal');
+        const closeModal = document.getElementById('closeModal');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const modalTitle = document.getElementById('modalTitle');
+        const menuForm = document.getElementById('menuForm');
+        const formMethod = document.getElementById('formMethod');
 
-    const deleteModal = document.getElementById('deleteModal');
-    const closeDeleteModal = document.getElementById('closeDeleteModal');
-    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
-    const deleteForm = document.getElementById('deleteForm');
+        const deleteModal = document.getElementById('deleteModal');
+        const closeDeleteModal = document.getElementById('closeDeleteModal');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        const deleteForm = document.getElementById('deleteForm');
 
-    // Image upload elements
-    const gambarMenuFile = document.getElementById('gambar_menu_file');
-    const gambarMenuBase64 = document.getElementById('gambar_menu_base64');
-    const gambarMenuPreview = document.getElementById('gambar_menu_preview');
+        const gambarMenuFile = document.getElementById('gambar_menu_file');
+        const gambarMenuBase64 = document.getElementById('gambar_menu_base64');
+        const gambarMenuPreview = document.getElementById('gambar_menu_preview');
 
-    // Function to reset image preview
-    function resetImagePreview() {
-        gambarMenuFile.value = '';
-        gambarMenuBase64.value = '';
-        gambarMenuPreview.src = '';
-        gambarMenuPreview.style.display = 'none';
-    }
-
-    // Handle image file selection
-    gambarMenuFile.addEventListener('change', function() {
-        const file = this.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                gambarMenuPreview.src = e.target.result;
-                gambarMenuPreview.style.display = 'block';
-                gambarMenuBase64.value = e.target.result; // Store base64 string
-            };
-            reader.readAsDataURL(file);
-        } else {
-            resetImagePreview();
+        function resetImagePreview() {
+            gambarMenuFile.value = '';
+            gambarMenuBase64.value = '';
+            gambarMenuPreview.src = '';
+            gambarMenuPreview.style.display = 'none';
         }
-    });
 
-    // Open Add Menu Modal
-    addMenuBtn.addEventListener('click', function() {
-        modalTitle.textContent = 'Tambah Item Menu';
-        menuForm.setAttribute('action', "{{ route('menu.store') }}");
-        formMethod.value = 'POST';
-        menuForm.reset(); // Clear form fields
-        resetImagePreview(); // Clear image preview
-        menuModal.style.display = 'block';
-    });
-
-    // Open Edit Menu Modal
-    document.querySelectorAll('.edit-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const id = this.dataset.id;
-            const gambar_menu = this.dataset.gambar_menu; // This will be the base64 string
-            const nama_menu = this.dataset.nama_menu;
-            const stok_menu = this.dataset.stok_menu;
-            const deskripsi_menu = this.dataset.deskripsi_menu;
-            const kategori_menu = this.dataset.kategori_menu;
-            const harga_menu = this.dataset.harga_menu;
-
-            modalTitle.textContent = 'Edit Item Menu';
-            menuForm.setAttribute('action', `/menu/${id}`); // Use dynamic route
-            formMethod.value = 'PUT';
-
-            // Set image preview and hidden input
-            if (gambar_menu) {
-                gambarMenuPreview.src = gambar_menu;
-                gambarMenuPreview.style.display = 'block';
-                gambarMenuBase64.value = gambar_menu;
+        gambarMenuFile.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    gambarMenuPreview.src = e.target.result;
+                    gambarMenuPreview.style.display = 'block';
+                    gambarMenuBase64.value = e.target.result;
+                };
+                reader.readAsDataURL(file);
             } else {
                 resetImagePreview();
             }
+        });
 
-            document.getElementById('nama_menu').value = nama_menu;
-            document.getElementById('stok_menu').value = stok_menu;
-            document.getElementById('deskripsi_menu').value = deskripsi_menu;
-            document.getElementById('kategori_menu').value = kategori_menu;
-            document.getElementById('harga_menu').value = harga_menu;
-
+        addMenuBtn.addEventListener('click', function() {
+            modalTitle.textContent = 'Tambah Menu';
+            menuForm.setAttribute('action', "{{ route('menu.store') }}");
+            menuForm.reset();
+            resetImagePreview();
             menuModal.style.display = 'block';
         });
-    });
 
-    // Open Delete Confirmation Modal
-    document.querySelectorAll('.delete-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const id = this.dataset.id;
-            deleteForm.setAttribute('action', `/menu/${id}`); // Use dynamic route
-            deleteModal.style.display = 'block';
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.dataset.id;
+                const gambar_menu = this.dataset.gambar_menu;
+                const nama_menu = this.dataset.nama_menu;
+                const stok_menu = this.dataset.stok_menu;
+                const deskripsi_menu = this.dataset.deskripsi_menu;
+                const kategori_menu = this.dataset.kategori_menu;
+                const harga_menu = this.dataset.harga_menu;
+
+                modalTitle.textContent = `Edit Menu #${id}`;
+                menuForm.setAttribute('action', `/menu/${id}`);
+                formMethod.value = 'PUT';
+
+                if (gambar_menu) {
+                    gambarMenuPreview.src = gambar_menu;
+                    gambarMenuPreview.style.display = 'block';
+                    gambarMenuBase64.value = gambar_menu;
+                } else {
+                    resetImagePreview();
+                }
+
+                document.getElementById('nama_menu').value = nama_menu;
+                document.getElementById('stok_menu').value = stok_menu;
+                document.getElementById('deskripsi_menu').value = deskripsi_menu;
+                document.getElementById('kategori_menu').value = kategori_menu;
+                document.getElementById('harga_menu').value = harga_menu;
+
+                menuModal.style.display = 'block';
+            });
+        });
+
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.dataset.id;
+
+                modalDeleteTitle.textContent = `Hapus Menu #${id}`;
+                deleteForm.setAttribute('action', `/menu/${id}`)
+                deleteModal.style.display = 'block';
+            });
+        });
+
+        closeModal.addEventListener('click', function() {
+            menuModal.style.display = 'none';
+        });
+        cancelBtn.addEventListener('click', function() {
+            menuModal.style.display = 'none';
+        });
+        closeDeleteModal.addEventListener('click', function() {
+            deleteModal.style.display = 'none';
+        });
+        cancelDeleteBtn.addEventListener('click', function() {
+            deleteModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target == menuModal) {
+                menuModal.style.display = 'none';
+            }
+            if (event.target == deleteModal) {
+                deleteModal.style.display = 'none';
+            }
         });
     });
-
-    // Close Modals
-    closeModal.addEventListener('click', function() {
-        menuModal.style.display = 'none';
-    });
-    cancelBtn.addEventListener('click', function() {
-        menuModal.style.display = 'none';
-    });
-    closeDeleteModal.addEventListener('click', function() {
-        deleteModal.style.display = 'none';
-    });
-    cancelDeleteBtn.addEventListener('click', function() {
-        deleteModal.style.display = 'none';
-    });
-
-    window.addEventListener('click', function(event) {
-        if (event.target == menuModal) {
-            menuModal.style.display = 'none';
-        }
-        if (event.target == deleteModal) {
-            deleteModal.style.display = 'none';
-        }
-    });
-});
 </script>
 @endsection

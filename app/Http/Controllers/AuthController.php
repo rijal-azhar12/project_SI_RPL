@@ -23,10 +23,11 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             $user = Auth::user();
-            if ($user->peran === 'kasir') {
-                return redirect()->intended('/kasir');
-            } elseif ($user->peran === 'owner') {
-                return redirect()->intended('/accounts'); // Owner can access multiple pages, redirect to a default one
+
+            if ($user->peran === 'Kasir') {
+                return redirect('/cashier');
+            } elseif ($user->peran === 'Owner') {
+                return redirect('/account');
             }
         }
 

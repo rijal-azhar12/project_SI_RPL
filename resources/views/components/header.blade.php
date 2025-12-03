@@ -10,17 +10,17 @@
             <span>Menu</span>
         </a>
 
-        <a href="{{ url('/pengeluaran') }}" class="nav-item ">
+        <a href="{{ url('/expense') }}" class="nav-item ">
             <img src="{{ asset('image/icon_pengeluaran.png') }}">
             <span>Pengeluaran</span>
         </a>
 
-        <a href="{{ url('/pemasukan') }}" class="nav-item ">
+        <a href="{{ url('/income') }}" class="nav-item ">
             <img src="{{ asset('image/icon_pemasukan.png') }}">
             <span>Pemasukan</span>
         </a>
 
-        <a href="{{ url('/accounts') }}" class="nav-item ">
+        <a href="{{ url('/account') }}" class="nav-item ">
             <img src="{{ asset('image/icon_akun.png') }}">
             <span>Akun</span>
         </a>

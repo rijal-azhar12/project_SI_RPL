@@ -8,82 +8,72 @@ use Illuminate\Support\Facades\Hash;
 
 class AccountController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $users = User::all();
         return view('account', ['users' => $users]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    public function create()
+    {
+        return view('account_create');
+    }
+
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'nama' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:user',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:8',
+            'peran' => 'required|string|in:Owner,Kasir',
         ]);
 
-        $lastId = User::max('id_user');
-        $newId = $lastId ? $lastId + 1 : 1;
-
-        $user = User::create([
-            'id_user' => $newId,
-            'nama' => $validatedData['nama'],
-            'username' => $validatedData['username'],
-            'password' => $validatedData['password'],
-            'peran' => $request->input('peran', 'kasir'), // Default role to 'kasir'
+        User::create([
+            'nama' => $request->nama,
+            'username' => $request->username,
+            'password' => Hash::make($request->password),
+            'peran' => $request->peran,
         ]);
 
-        return response()->json(['success' => true, 'message' => 'Account created successfully.']);
+        return redirect()->route('account.index')->with('success', 'Akun berhasil ditambahkan!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $account) // Using $account for route model binding
+    public function show(User $account) {}
+
+    public function edit(User $account)
     {
-        return response()->json($account);
+        return view('account_edit', ['user' => $account]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, User $account) // Using $account for route model binding
+    public function update(Request $request, User $account)
     {
         $rules = [
             'nama' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:user,username,' . $account->id_user . ',id_user',
+            'peran' => 'required|string|in:Owner,Kasir',
         ];
 
         if ($request->filled('password')) {
-            $rules['password'] = 'required|string|min:8|confirmed';
+            $rules['password'] = 'required|string|min:8';
         }
 
-        $validatedData = $request->validate($rules);
+        $request->validate($rules);
 
-        $account->nama = $validatedData['nama'];
-        $account->username = $validatedData['username'];
+        $account->nama = $request->nama;
+        $account->username = $request->username;
         if ($request->filled('password')) {
-            $account->password = $validatedData['password'];
+            $account->password = Hash::make($request->password);
         }
-        $account->peran = $request->input('peran', $account->peran); // Allow role update, default to current role
+        $account->peran = $request->peran;
 
         $account->save();
 
-        return response()->json(['success' => true, 'message' => 'Account updated successfully.']);
+        return redirect()->route('account.index')->with('success', 'Akun berhasil diperbarui!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(User $account) // Using $account for route model binding
+    public function destroy(User $account)
     {
         $account->delete();
-        return response()->json(['success' => true, 'message' => 'Account deleted successfully.']);
+        return redirect()->route('account.index')->with('success', 'Akun berhasil dihapus!');
     }
 }

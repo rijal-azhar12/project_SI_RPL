@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Pengeluaran extends Model
+class Expense extends Model
 {
     use HasFactory;
 
@@ -15,6 +15,17 @@ class Pengeluaran extends Model
      * @var string
      */
     protected $table = 'pengeluaran';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'keterangan',
+        'jumlah_pengeluaran',
+        'tanggal_pengeluaran',
+    ];
 
     /**
      * The primary key associated with the table.
