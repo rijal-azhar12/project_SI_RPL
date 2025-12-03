@@ -30,7 +30,11 @@
             <span>Owner</span>
         </a>
 
-        <a href="" class="nav-item logout">
+        <form action="{{ route('logout') }}" method="POST" style="display: none;" id="logout">
+            @csrf
+        </form>
+        <a href="" class="nav-item logout"
+            onclick="event.preventDefault(); document.getElementById('logout').submit();">
             <img src="{{ asset('image/icon_logout.png') }}">
             <span>Logout</span>
         </a>
