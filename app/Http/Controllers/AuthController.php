@@ -27,7 +27,7 @@ class AuthController extends Controller
             if ($user->peran === 'Kasir') {
                 return redirect('/cashier');
             } elseif ($user->peran === 'Owner') {
-                return redirect('/account');
+                return redirect('/menu');
             }
         }
 
