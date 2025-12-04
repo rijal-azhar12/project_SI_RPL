@@ -5,27 +5,23 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @foreach ($menus as $kategori => $items)
-        <h2 class="product-category-title">{{ ucfirst($kategori) }}</h2>
-        <div class="product-grid">
-            @foreach ($items as $menu)
-                <div class="product-card">
-                    <img class="product-image" src="{{ asset('storage/' . $menu->gambar_menu) }}" alt="{{ $menu->nama_menu }}">
-                    <div class="product-info">
-                        <span class="product-tag">{{ $menu->kategori_menu }}</span>
-                        <span class="product-name">{{ $menu->nama_menu }}</span>
-                        <span class="product-price">Rp {{ number_format($menu->harga_menu, 0, ',', '.') }}</span>
-                        <span class="product-stock">Stok: {{ $menu->stok_menu }}</span>
-                    </div>
-                    <button class="btn-add-to-cart" 
-                            data-id="{{ $menu->id_menu }}" 
-                            data-name="{{ $menu->nama_menu }}" 
-                            data-price="{{ $menu->harga_menu }}"
-                            data-stock="{{ $menu->stok_menu }}">
-                        + Add
-                    </button>
-                </div>
-            @endforeach
+    <h2 class="product-category-title">{{ ucfirst($kategori) }}</h2>
+    <div class="product-grid">
+        @foreach ($items as $menu)
+        <div class="product-card">
+            <img class="product-image" src="{{ $menu->gambar_menu }}">
+            <div class="product-info">
+                <span class="product-name">{{ $menu->nama_menu }}</span>
+                <span class="product-price">Rp {{ number_format($menu->harga_menu, 0, ',', '.') }}</span>
+                <span class="product-stock">Stok: {{ $menu->stok_menu }}</span>
+            </div>
+            <button class="btn-add-to-cart" data-id="{{ $menu->id_menu }}" data-name="{{ $menu->nama_menu }}"
+                data-price="{{ $menu->harga_menu }}" data-stock="{{ $menu->stok_menu }}">
+                + Tambah
+            </button>
         </div>
+        @endforeach
+    </div>
     @endforeach
 </div>
 

@@ -25,7 +25,7 @@
             <span>Akun</span>
         </a>
 
-        <a href="" class="nav-item owner">
+        <a href="" class="nav-item status">
             <img src="{{ asset('image/icon_owner.png') }}">
             <span>Owner</span>
         </a>
