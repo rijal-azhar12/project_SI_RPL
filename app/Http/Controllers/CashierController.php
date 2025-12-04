@@ -22,7 +22,6 @@ class CashierController extends Controller
         $request->validate([
             'items' => 'required|json',
             'total' => 'required|numeric',
-            'uang_bayar' => 'required|numeric',
         ]);
 
         DB::beginTransaction();
@@ -48,6 +47,7 @@ class CashierController extends Controller
                 $transaksiDetail->id_menu = $item['id_menu'];
                 $transaksiDetail->jumlah_item = $item['quantity'];
                 $transaksiDetail->subtotal = $item['harga_menu'] * $item['quantity'];
+                $transaksiDetail->total = $request->total;
                 $transaksiDetail->save();
 
                 $menu->stok_menu -= $item['quantity'];
@@ -56,12 +56,9 @@ class CashierController extends Controller
 
             DB::commit();
 
-            $kembalian = $request->uang_bayar - $request->total;
-
             return response()->json([
                 'success' => true,
                 'message' => 'Transaksi berhasil!',
-                'kembalian' => $kembalian
             ]);
         } catch (\Exception $e) {
             DB::rollBack();

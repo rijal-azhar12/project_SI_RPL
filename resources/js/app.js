@@ -129,13 +129,8 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-            const uangBayar = prompt('Masukkan jumlah uang yang dibayarkan:', total);
 
-            if (uangBayar === null) return; 
-
-            const parsedUangBayar = parseFloat(uangBayar);
-            if (isNaN(parsedUangBayar) || parsedUangBayar < total) {
-                alert('Jumlah uang tidak valid atau tidak mencukupi.');
+            if (!confirm(`Total belanja adalah ${formatCurrency(total)}. Lanjutkan transaksi?`)) {
                 return;
             }
 
@@ -148,7 +143,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             document.getElementById('checkout-items').value = JSON.stringify(itemsForCheckout);
             document.getElementById('checkout-total').value = total;
-            document.getElementById('checkout-uang-bayar').value = parsedUangBayar;
 
             const form = document.getElementById('checkout-form');
             const formData = new FormData(form);
@@ -156,7 +150,7 @@ document.addEventListener("DOMContentLoaded", function () {
             axios.post(form.action, formData)
                 .then(response => {
                     if (response.data.success) {
-                        alert(`Transaksi berhasil! Kembalian: ${formatCurrency(response.data.kembalian)}`);
+                        alert(`Transaksi berhasil!`);
                         cart = [];
                         saveAndRenderCart();
                     } else {

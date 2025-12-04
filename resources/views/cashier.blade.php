@@ -29,6 +29,5 @@
     @csrf
     <input type="hidden" name="items" id="checkout-items">
     <input type="hidden" name="total" id="checkout-total">
-    <input type="hidden" name="uang_bayar" id="checkout-uang-bayar">
 </form>
 @endsection
