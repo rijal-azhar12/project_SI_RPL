@@ -74,7 +74,7 @@ body {
     background: rgb(220, 220, 220);
 }
 
-.nav-item.owner {
+.nav-item.status {
     background: #5e3a2f;
     color: white;
 }
@@ -665,7 +665,6 @@ body {
     text-align: center;
 }
 
-/* Tag Kategori di dalam tabel */
 .item-category-cell {
     display: flex;
     justify-content: center;
@@ -683,65 +682,34 @@ body {
     font-weight: 500;
 }
 
-/* Tombol Aksi Baru (Edit/Delete dengan Teks) */
-.btn-action-edit,
-.btn-action-delete {
-    border: none;
-    border-radius: 20px;
-    height: 45px;
-    width: 80px;
-    font-size: 16px;
-    font-family: "Poppins", sans-serif;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-.btn-action-edit {
-    background: #c47e45;
-}
-.btn-action-edit:hover {
-    background: #b36d35;
-}
-.btn-action-delete {
-    background: #d9534f;
-}
-.btn-action-delete:hover {
-    background: #c9302c;
-}
+/* Cashier */
 
-/* ===============================================
-   TAMBAHKAN INI DI BAWAH app.css ANDA
-   Style Khusus Halaman Kasir
-   =============================================== */
-
-/* Mengubah body default untuk halaman kasir */
 body.cashier-body {
-    overflow: hidden; /* Mencegah scrolling di body utama */
+    overflow: hidden;
 }
 
-/* Header Baru */
 .header-cashier {
     padding: 0 30px;
     height: 90px;
 }
+
 .nav-menu-right {
     margin-left: 0;
 }
 
-/* Layout 2 Kolom */
 .cashier-container {
     display: flex;
-    height: calc(100vh - 90px); /* Tinggi penuh dikurangi header */
+    height: calc(100vh - 90px);
     max-width: 100%;
     margin: 0;
     padding: 0;
 }
 
 .cashier-content {
-    flex-grow: 1; /* Mengisi sisa ruang */
+    flex-grow: 1;
     padding: 20px 30px;
-    overflow-y: auto; /* Bisa di-scroll jika item banyak */
-    background: #f2e3d5; /* Latar belakang utama */
+    overflow-y: auto;
+    background: #f2e3d5;
 }
 
 .cashier-page-title {
@@ -751,7 +719,6 @@ body.cashier-body {
     margin-bottom: 20px;
 }
 
-/* Grid Produk */
 .product-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -769,7 +736,7 @@ body.cashier-body {
 
 .product-image {
     width: 100%;
-    height: 200px;
+    height: 250px;
     object-fit: cover;
     background: #e8d5c3;
 }
@@ -778,26 +745,18 @@ body.cashier-body {
     padding: 10px 15px;
     display: grid;
     grid-template-areas:
-        "tag price"
-        "name name";
+    "name name"
+    "stock price";
     gap: 4px;
 }
-.product-tag {
-    grid-area: tag;
-    font-size: 12px;
-    font-weight: 500;
-    color: #c47e45;
-    background: #f2e3d5;
-    padding: 2px 8px;
-    border-radius: 10px;
-    width: fit-content;
-}
+
 .product-name {
     grid-area: name;
     font-size: 18px;
     font-weight: 500;
     color: #5e3a2f;
 }
+
 .product-price {
     grid-area: price;
     font-size: 16px;
