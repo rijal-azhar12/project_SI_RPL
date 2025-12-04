@@ -26,12 +26,11 @@ class CashierController extends Controller
 
         DB::beginTransaction();
         try {
-            $id_transaksi = date('YmdHis');
             $transaksi = new Transaksi();
-            $transaksi->id_transaksi = $id_transaksi;
             $transaksi->id_user = Auth::id();
             $transaksi->tanggal_transaksi = now();
             $transaksi->save();
+            $id_transaksi = $transaksi->id_transaksi;
 
             $items = json_decode($request->items, true);
 
