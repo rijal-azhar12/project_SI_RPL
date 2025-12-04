@@ -8,6 +8,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\ExpenseController;
 
+use App\Http\Controllers\CashierController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,9 +25,8 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth', 'Kasir'])->group(function () {
-    Route::get('/cashier', function () {
-        return view('cashier');
-    })->name('cashier');
+    Route::get('/cashier', [CashierController::class, 'index'])->name('cashier.index');
+    Route::post('/cashier/checkout', [CashierController::class, 'checkout'])->name('cashier.checkout');
 });
 
 Route::middleware(['auth', 'Owner'])->group(function () {
