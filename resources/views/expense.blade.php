@@ -32,7 +32,7 @@
     @endif
 
     <div class="table">
-        <div class="table-header">
+        <div class="table-header expense-grid">
             <div>#</div>
             <div>Keterangan</div>
             <div>Jumlah</div>
@@ -41,23 +41,24 @@
         </div>
 
         @forelse ($expenses as $expense)
-        <div class="table-row">
-            <div>{{ $expense->id_pengeluaran }}</div>
-            <div>{{ $expense->keterangan }}</div>
-            <div>Rp{{ number_format($expense->jumlah_pengeluaran, 0, ',', '.') }}</div>
-            <div>{{ $expense->tanggal_pengeluaran }}</div>
+        <div class="table-row expense-grid">
+            <div class="item-idpengeluaran">{{ $expense->id_pengeluaran }}</div>
+            <div class="item-keterangan">{{ $expense->keterangan }}</div>
+            <div class="item-jumlahpengeluaran">Rp{{ number_format($expense->jumlah_pengeluaran, 0, ',', '.') }}</div>
+            <div class="item-tanggalpengeluaran">{{ $expense->tanggal_pengeluaran }}</div>
             <div class="item-actions">
-                <div class="action-btn edit-btn"
-                    data-id="{{ $expense->id_pengeluaran }}"
+                <div class="action-btn edit-btn" data-id="{{ $expense->id_pengeluaran }}"
                     data-keterangan="{{ $expense->keterangan }}"
                     data-jumlah_pengeluaran="{{ $expense->jumlah_pengeluaran }}"
                     data-tanggal_pengeluaran="{{ $expense->tanggal_pengeluaran }}">
                     <img src="{{ asset('image/icon_edit.png') }}" alt="Edit">
                 </div>
-                <form action="{{ route('expense.destroy', $expense->id_pengeluaran) }}" method="POST" style="display:inline;">
+                <form action="{{ route('expense.destroy', $expense->id_pengeluaran) }}" method="POST"
+                    style="display:inline;">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="action-btn delete-btn" onclick="return confirm('Apakah anda yakin ingin menghapus pengeluaran ini?')">
+                    <button type="submit" class="action-btn delete-btn"
+                        onclick="return confirm('Apakah anda yakin ingin menghapus pengeluaran ini?')">
                         <img src="{{ asset('image/icon_delete.png') }}" alt="Delete">
                     </button>
                 </form>
@@ -123,7 +124,8 @@
                 const id = this.dataset.id;
                 const keterangan = this.dataset.keterangan;
                 const jumlah_pengeluaran = this.dataset.jumlah_pengeluaran;
-                const tanggal_pengeluaran = this.dataset.tanggal_pengeluaran.split(' ')[0]; // Ambil bagian tanggal saja
+                const tanggal_pengeluaran = this.dataset.tanggal_pengeluaran.split(' ')[
+                    0]; // Ambil bagian tanggal saja
 
                 modalTitle.textContent = `Edit Pengeluaran #${id}`;
                 expenseForm.setAttribute('action', `/expense/${id}`);
