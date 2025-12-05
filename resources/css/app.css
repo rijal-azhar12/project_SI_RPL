@@ -43,7 +43,6 @@ body {
 
 .logo-text {
     font-size: 24px;
-    font-weight: 400;
     color: #5e3a2f;
 }
 
@@ -65,7 +64,6 @@ body {
     border-radius: 20px;
     color: #5e3a2f;
     font-size: 20px;
-    font-weight: 400;
     text-decoration: none;
     cursor: pointer;
 }
@@ -211,7 +209,6 @@ body {
 .item-descriptionmenu,
 .item-pricemenu {
     font-size: 16px;
-    font-weight: 500;
     text-align: center;
 }
 
@@ -242,7 +239,6 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 18px;
-    font-weight: 500;
     justify-self: center;
 }
 
@@ -340,7 +336,7 @@ body {
 
 .modal-title {
     font-size: 24px;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .close-btn {
@@ -494,7 +490,6 @@ body {
 .expense-grid .item-jumlahpengeluaran,
 .expense-grid .item-tanggalpengeluaran {
     font-size: 16px;
-    font-weight: 500;
 }
 
 /* Filter & Stats card (Income) */
@@ -518,17 +513,17 @@ body {
 
 .stat-card .stat-title {
     font-size: 20px;
-    font-weight: 400;
+    font-weight: 500;
     color: black;
 }
 .stat-card .stat-value {
     font-size: 28px;
-    font-weight: 400;
+    font-weight: 500;
     color: #5e3a2f;
 }
 .stat-card .stat-subtitle {
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 500;
     color: black;
     opacity: 0.5;
 }
@@ -636,7 +631,6 @@ body {
 .item-itemtransaction,
 .item-pricetransaction {
     font-size: 16px;
-    font-weight: 500;
     text-align: center;
 }
 
@@ -672,7 +666,7 @@ body.cashier-body {
 
 .cashier-page-title {
     font-size: 24px;
-    font-weight: 600;
+    font-weight: 500;
     color: #5e3a2f;
     margin-bottom: 20px;
 }
@@ -718,7 +712,6 @@ body.cashier-body {
 .product-price {
     grid-area: price;
     font-size: 16px;
-    font-weight: 400;
     color: #c47e45;
     text-align: right;
     font-weight: 500;
@@ -763,7 +756,7 @@ body.cashier-body {
 
 .order-title {
     font-size: 20px;
-    font-weight: 600;
+    font-weight: 500;
     color: #5e3a2f;
 }
 
@@ -808,7 +801,7 @@ body.cashier-body {
 }
 .cart-item-name {
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 500;
     color: #5e3a2f;
 }
 .cart-item-price {
@@ -835,7 +828,7 @@ body.cashier-body {
 }
 .cart-item-total {
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 500;
     color: #5e3a2f;
 }
 
@@ -852,7 +845,7 @@ body.cashier-body {
     background: none;
     border: none;
     font-size: 20px;
-    font-weight: 600;
+    font-weight: 500;
     color: #c47e45;
     cursor: pointer;
     width: 20px;
@@ -866,6 +859,7 @@ body.cashier-body {
 }
 
 /* Footer Keranjang */
+
 .order-footer {
     padding: 20px;
     border-top: 1px solid #e8d5c3;
@@ -921,7 +915,7 @@ body.cashier-body {
 
 .product-category-title {
     font-size: 24px;
-    font-weight: 600;
+    font-weight: 500;
     color: #5e3a2f;
     margin-bottom: 20px;
     margin-top: 20px;
