@@ -153,6 +153,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         alert(`Transaksi berhasil!`);
                         cart = [];
                         saveAndRenderCart();
+                        window.location.reload();
                     } else {
                         alert(`Error: ${response.data.message}`);
                     }
