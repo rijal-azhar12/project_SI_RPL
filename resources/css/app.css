@@ -513,7 +513,7 @@ body {
 
 .stat-card .stat-title {
     font-size: 20px;
-    font-weight: 500;
+    font-weight: 400;
     color: black;
 }
 .stat-card .stat-value {
@@ -523,7 +523,7 @@ body {
 }
 .stat-card .stat-subtitle {
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 400;
     color: black;
     opacity: 0.5;
 }
