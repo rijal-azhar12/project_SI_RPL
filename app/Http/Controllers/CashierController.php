@@ -24,6 +24,8 @@ class CashierController extends Controller
             'total' => 'required|numeric',
         ]);
 
+        date_default_timezone_set('Asia/Jakarta');
+
         DB::beginTransaction();
         try {
             $transaksi = new Transaksi();
