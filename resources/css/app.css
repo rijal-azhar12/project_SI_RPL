@@ -646,7 +646,7 @@ body {
 }
 
 .income-grid {
-    grid-template-columns: 40px 1.2fr 1.5fr 1.5fr 1fr 0.5fr 0.75fr 1.2fr 0.75fr;
+    grid-template-columns: 40px 200px 1fr 1fr 0.5fr 1fr 1fr;
     font-size: 16px;
 }
 
