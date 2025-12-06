@@ -51,8 +51,8 @@
             <div># Kasir</div>
             <div>Tanggal</div>
             <div>Nama Menu</div>
-            <div>Jumlah</div>
             <div>Harga</div>
+            <div>Jumlah</div>
             <div>Total Harga</div>
         </div>
 
@@ -62,16 +62,24 @@
             <div class="item-idcashier">{{ $transaksi->user->id_user }} - {{ $transaksi->user->nama ?? 'N/A' }}</div>
             <div class="item-datetransaction">{{ $transaksi->tanggal_transaksi }}</div>
             <div class="item-namemenu">
-                @if($transaksi->details->isNotEmpty() && $transaksi->details->first()->menu)
-                {{ $transaksi->details->first()->menu->nama_menu }}
+                @if ($transaksi->details->isNotEmpty())
+                @foreach ($transaksi->details as $detail)
+                {{ $detail->jumlah_item }}x {{ $detail->menu->nama_menu ?? 'Menu tidak ditemukan' }}<br>
+                @endforeach
+                @else
+                N/A
+                @endif
+            </div>
+            <div class="item-pricemenu">
+                @if ($transaksi->details->isNotEmpty())
+                @foreach ($transaksi->details as $detail)
+                Rp{{ number_format($detail->subtotal, 0, ',', '.') }}<br>
+                @endforeach
                 @else
                 N/A
                 @endif
             </div>
             <div class="item-itemtransaction">{{ $transaksi->details->sum('jumlah_item') }}</div>
-            <div class="item-pricemenu">
-                Rp{{ number_format($transaksi->details->sum('subtotal'), 0, ',', '.') }}
-            </div>
             <div class="item-pricetransaction">
                 Rp{{ number_format($transaksi->details->sum(function ($d) {return $d->subtotal * $d->jumlah_item;}), 0, ',', '.') }}
             </div>
