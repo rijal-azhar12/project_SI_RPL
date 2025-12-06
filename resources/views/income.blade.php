@@ -51,8 +51,8 @@
             <div># Kasir</div>
             <div>Tanggal</div>
             <div>Nama Menu</div>
-            <div>Harga</div>
-            <div>Jumlah</div>
+            <div>Harga per Menu</div>
+            <div>Total Menu</div>
             <div>Total Harga</div>
         </div>
 

@@ -43,11 +43,10 @@ class CashierController extends Controller
                 }
 
                 $transaksiDetail = new TransaksiDetail();
-                $transaksiDetail->id_detail = $id_transaksi . $item['id_menu'];
                 $transaksiDetail->id_transaksi = $id_transaksi;
                 $transaksiDetail->id_menu = $item['id_menu'];
                 $transaksiDetail->jumlah_item = $item['quantity'];
-                $transaksiDetail->subtotal = $item['harga_menu'] * $item['quantity'];
+                $transaksiDetail->subtotal = $item['harga_menu'];
                 $transaksiDetail->total = $request->total;
                 $transaksiDetail->save();
 
