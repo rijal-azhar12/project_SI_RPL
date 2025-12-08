@@ -43,7 +43,6 @@ body {
 
 .logo-text {
     font-size: 24px;
-    font-weight: 400;
     color: #5e3a2f;
 }
 
@@ -65,7 +64,6 @@ body {
     border-radius: 20px;
     color: #5e3a2f;
     font-size: 20px;
-    font-weight: 400;
     text-decoration: none;
     cursor: pointer;
 }
@@ -112,10 +110,8 @@ body {
 
 .page-subtitle {
     font-size: 18px;
-    opacity: 0.7;
-    color: #3a3a3a;
+    color: #707070;
     margin-bottom: 0px;
-    align-self: flex-end;
 }
 
 .add-btn {
@@ -211,7 +207,6 @@ body {
 .item-descriptionmenu,
 .item-pricemenu {
     font-size: 16px;
-    font-weight: 500;
     text-align: center;
 }
 
@@ -242,7 +237,6 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 18px;
-    font-weight: 500;
     justify-self: center;
 }
 
@@ -340,7 +334,7 @@ body {
 
 .modal-title {
     font-size: 24px;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .close-btn {
@@ -489,17 +483,11 @@ body {
     grid-template-columns: 50px 1.5fr 2fr 1fr 130px;
 }
 
-.expense-grid,
-.table-header.expense-grid > div:nth-child(4) {
-    text-align: right;
-}
-
-.item-timestamp,
-.item-description {
+.expense-grid .item-idpengeluaran,
+.expense-grid .item-keterangan,
+.expense-grid .item-jumlahpengeluaran,
+.expense-grid .item-tanggalpengeluaran {
     font-size: 16px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 /* Filter & Stats card (Income) */
@@ -528,7 +516,7 @@ body {
 }
 .stat-card .stat-value {
     font-size: 28px;
-    font-weight: 400;
+    font-weight: 500;
     color: #5e3a2f;
 }
 .stat-card .stat-subtitle {
@@ -580,8 +568,7 @@ body {
 }
 
 .filter-controls input,
-.filter-controls select,
-.filter-controls .filter-btn {
+.filter-controls select {
     border: 1px solid #e5e5e5;
     border-radius: 15px;
     height: 45px;
@@ -592,6 +579,12 @@ body {
 }
 
 .filter-controls .filter-btn {
+    border: 1px solid #e5e5e5;
+    border-radius: 15px;
+    height: 45px;
+    padding: 0 15px;
+    font-size: 16px;
+    font-family: "Poppins", sans-serif;
     background: white;
     cursor: pointer;
     color: #5e3a2f;
@@ -625,33 +618,8 @@ body {
     font-weight: 500;
 }
 
-.btn-action-edit,
-.btn-action-delete {
-    border: none;
-    border-radius: 20px;
-    height: 45px;
-    width: 80px;
-    font-size: 16px;
-    font-family: "Poppins", sans-serif;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-.btn-action-edit {
-    background: #c47e45;
-}
-.btn-action-edit:hover {
-    background: #b36d35;
-}
-.btn-action-delete {
-    background: #d9534f;
-}
-.btn-action-delete:hover {
-    background: #c9302c;
-}
-
 .income-grid {
-    grid-template-columns: 40px 1.2fr 1.5fr 1.5fr 1fr 0.5fr 0.75fr 1.2fr 0.75fr;
+    grid-template-columns: 40px 200px 1fr 1fr 1fr 0.5fr 1fr;
     font-size: 16px;
 }
 
@@ -661,25 +629,7 @@ body {
 .item-itemtransaction,
 .item-pricetransaction {
     font-size: 16px;
-    font-weight: 500;
     text-align: center;
-}
-
-.item-category-cell {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.item-category-tag {
-    width: 110px;
-    height: 45px;
-    background: #f2e3d5;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    font-weight: 500;
 }
 
 /* Cashier */
@@ -714,7 +664,7 @@ body.cashier-body {
 
 .cashier-page-title {
     font-size: 24px;
-    font-weight: 600;
+    font-weight: 500;
     color: #5e3a2f;
     margin-bottom: 20px;
 }
@@ -760,7 +710,6 @@ body.cashier-body {
 .product-price {
     grid-area: price;
     font-size: 16px;
-    font-weight: 400;
     color: #c47e45;
     text-align: right;
     font-weight: 500;
@@ -783,9 +732,10 @@ body.cashier-body {
     background: #b36d35;
 }
 
-/* Sidebar Keranjang (Current Order) */
+/* Sidebar Current Order */
+
 .order-sidebar {
-    width: 400px; /* Lebar sidebar */
+    width: 400px;
     flex-shrink: 0;
     background: white;
     border-left: 1px solid #e8d5c3;
@@ -804,12 +754,12 @@ body.cashier-body {
 
 .order-title {
     font-size: 20px;
-    font-weight: 600;
+    font-weight: 500;
     color: #5e3a2f;
 }
 
 .order-list {
-    flex-grow: 1; /* Mengisi sisa ruang */
+    flex-grow: 1;
     overflow-y: auto;
     padding: 10px;
 }
@@ -824,17 +774,13 @@ body.cashier-body {
     text-align: center;
     gap: 15px;
 }
+
 .cart-empty-state span {
     font-size: 16px;
     color: #3a3a3a;
     opacity: 0.7;
 }
-.cart-empty-state svg {
-    width: 50px;
-    height: 50px;
-}
 
-/* Desain Item di Keranjang (Rapi) */
 .cart-item {
     background: #f9f3ed;
     border-radius: 10px;
@@ -853,7 +799,7 @@ body.cashier-body {
 }
 .cart-item-name {
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 500;
     color: #5e3a2f;
 }
 .cart-item-price {
@@ -880,7 +826,7 @@ body.cashier-body {
 }
 .cart-item-total {
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 500;
     color: #5e3a2f;
 }
 
@@ -897,7 +843,7 @@ body.cashier-body {
     background: none;
     border: none;
     font-size: 20px;
-    font-weight: 600;
+    font-weight: 500;
     color: #c47e45;
     cursor: pointer;
     width: 20px;
@@ -911,6 +857,7 @@ body.cashier-body {
 }
 
 /* Footer Keranjang */
+
 .order-footer {
     padding: 20px;
     border-top: 1px solid #e8d5c3;
@@ -964,21 +911,16 @@ body.cashier-body {
     background: #fde8e8;
 }
 
-/* ===============================================
-   TAMBAHKAN INI DI BAWAH app.css ANDA
-   Style untuk Judul Kategori Produk
-   =============================================== */
-
 .product-category-title {
     font-size: 24px;
-    font-weight: 600;
+    font-weight: 500;
     color: #5e3a2f;
     margin-bottom: 20px;
-    margin-top: 20px; /* Memberi jarak dari grid sebelumnya */
+    margin-top: 20px;
     border-bottom: 1px solid #e8d5c3;
     padding-bottom: 10px;
 }
 
 .product-category-title:first-of-type {
-    margin-top: 0; /* Hapus margin atas untuk judul pertama */
+    margin-top: 0;
 }

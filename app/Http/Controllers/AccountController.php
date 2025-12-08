@@ -31,7 +31,7 @@ class AccountController extends Controller
         User::create([
             'nama' => $request->nama,
             'username' => $request->username,
-            'password' => Hash::make($request->password),
+            'password' => $request->password,
             'peran' => $request->peran,
         ]);
 
@@ -62,7 +62,7 @@ class AccountController extends Controller
         $account->nama = $request->nama;
         $account->username = $request->username;
         if ($request->filled('password')) {
-            $account->password = Hash::make($request->password);
+            $account->password = $request->password;
         }
         $account->peran = $request->peran;
 
