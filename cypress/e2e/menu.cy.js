@@ -16,42 +16,42 @@ describe("Menu Management", () => {
         cy.get('textarea[name="deskripsi_menu"]').type("Test");
         cy.get('select[name="kategori_menu"]').select("Makanan");
 
-        cy.get('button[type="submit"]').click();
+        cy.get('button[type="submit"].btn-primary').click({ multiple: true });
 
         cy.contains("Cypress Test Menu Item").should("be.visible");
-        cy.contains("15000").should("be.visible");
+        cy.contains("Rp15.000").should("be.visible");
         cy.contains("100").should("be.visible");
         cy.contains("Makanan").should("be.visible");
     });
 
     it("should allow owner to edit an existing menu item", () => {
         cy.contains("Cypress Test Menu Item")
-            .parents("tr")
+            .parents("div.table-row")
             .find(".edit-btn")
-            .click();
+            .click({ multiple: true });
 
         cy.get('input[name="harga_menu"]').clear().type("20000");
         cy.get('input[name="stok_menu"]').clear().type("150");
         cy.get('select[name="kategori_menu"]').select("Minuman");
 
-        cy.get('button[type="submit"]').click();
+        cy.get('button[type="submit"].btn-primary').click({ multiple: true });
 
         cy.contains("Cypress Test Menu Item").should("be.visible");
-        cy.contains("20000").should("be.visible");
+        cy.contains("Rp20.000").should("be.visible");
         cy.contains("150").should("be.visible");
         cy.contains("Minuman").should("be.visible");
     });
 
     it("should allow owner to delete a menu item", () => {
         cy.contains("Cypress Test Menu Item")
-            .parents("tr")
+            .parents("div.table-row")
             .find(".delete-btn")
-            .click();
+            .click({ multiple: true });
 
-        cy.on("window:confirm", (str) => {
-            expect(str).to.equal("Apakah anda yakin ingin menghapus menu ini?");
-            return true;
-        });
+        cy.get("#deleteModal").should("be.visible");
+        cy.get("#deleteModal")
+            .find('button[type="submit"].btn-danger')
+            .click({ multiple: true });
 
         cy.contains("Cypress Test Menu Item").should("not.exist");
     });
