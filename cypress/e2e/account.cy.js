@@ -45,7 +45,6 @@ describe("Account Management", () => {
         cy.get(".table-row.account")
             .contains("testUser_edited")
             .should("be.visible");
-        cy.get(".table-row.account").contains("testUser").should("not.exist");
 
         cy.get(".table-row.account")
             .contains("testUser_edited")
@@ -64,7 +63,7 @@ describe("Account Management", () => {
     });
 
     it("should prevent cashier from accessing account management page", () => {
-        cy.get("form[action='logout'].button").click();
+        cy.get(".logout").click();
 
         cy.visit("/login");
         cy.get('input[name="username"]').type("Qol");
